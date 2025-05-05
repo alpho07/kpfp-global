@@ -8,22 +8,20 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Institution extends Model implements HasMedia
-{
-    use SoftDeletes, InteractsWithMedia;
+class Institution extends Model implements HasMedia {
+
+    use SoftDeletes,
+        InteractsWithMedia;
 
     public $table = 'institutions';
-
     protected $appends = [
         'logo',
     ];
-
     protected $dates = [
         'created_at',
         'updated_at',
         'deleted_at',
     ];
-
     protected $fillable = [
         'name',
         'created_at',
@@ -32,27 +30,27 @@ class Institution extends Model implements HasMedia
         'description',
     ];
 
-    public function registerMediaConversions(Media $media = null): void
-    {
+    public function registerMediaConversions(Media $media = null): void {
         $this->addMediaConversion('thumb')->width(50)->height(50);
     }
 
-    public function users()
-    {
+    public function users() {
         return $this->hasMany(User::class, 'institution_id', 'id');
     }
 
-    public function courses()
-    {
+    public function payment_option() {
+        return $this->hasOne(\App\Models\ModeOfPayment::class, 'institution_id', 'id');
+    }
+
+    public function courses() {
         return $this->hasMany(Course::class, 'institution_id', 'id');
     }
 
-    public function getLogoAttribute()
-    {
+    public function getLogoAttribute() {
         $file = $this->getMedia('logo')->last();
 
         if ($file) {
-            $file->url       = $file->getUrl();
+            $file->url = $file->getUrl();
             $file->thumbnail = $file->getUrl('thumb');
         }
 

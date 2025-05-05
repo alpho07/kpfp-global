@@ -12,6 +12,10 @@ use App\Http\Requests\StoreEnrollmentRequest;
 use App\Http\Requests\UpdateEnrollmentRequest;
 use App\Mail\BondingFormMail;
 use App\Mail\VerifiedMail;
+use App\Mail\QueryMail;
+use App\Mail\RejectedMail;
+use App\Mail\ApprovedMail;
+use App\Mail\ApplicationSuccessMail;
 use App\Models\User;
 use Gate;
 use Illuminate\Auth\Notifications\VerifyEmail;
@@ -19,15 +23,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 
-class EnrollmentsController extends Controller
-{
+class EnrollmentsController extends Controller {
 
-
-
-
-
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
 
         $user = auth()->user();
         $role = $user->roles()->pluck('name')->toArray();
@@ -100,8 +98,10 @@ class EnrollmentsController extends Controller
         return view('admin.enrollments.index', compact('enrollments', 'start_date', 'end_date', 'county', 'town_city', 'affiliated_hospital', 'gender', 'authorized_form', 'verification_status', 'short_listing_status', 'stage', 'payment_verified'));
     }
 
-    public function updateStatus(Applications $application_id, Request $request)
-    {
+    public function updateStatus(Applications $application_id, Request $request) {
+        $user = User::find($application_id->application_id);
+        $checklist = Checklist::with('course')->find($application_id->checklist);
+
         $data = [
             'status' => $request->status
         ];
@@ -111,13 +111,19 @@ class EnrollmentsController extends Controller
         }
 
         $application_id->update($data);
+        
+        if ($request->status == 'Approved') {
+            Mail::to($user->email)->send(new ApprovedMail($user, $checklist));
+        }
+
 
         return response()->json(['message' => 'Status updated successfully']);
     }
 
+    public function updateStatusForm(Applications $application_id, Request $request) {
+        $user = User::find($application_id->application_id);
+        $checklist = Checklist::with('course')->find($application_id->checklist);
 
-    public function updateStatusForm(Applications $application_id, Request $request)
-    {
         $data = [
             'status' => $request->status
         ];
@@ -128,29 +134,38 @@ class EnrollmentsController extends Controller
 
         $application_id->update($data);
 
+        if ($request->status == 'Query') {
+            Mail::to($user->email)->send(new QueryMail($user, $checklist, $request->comments));
+        }
+
+        if ($request->status == 'Rejected') {
+            Mail::to($user->email)->send(new RejectedMail($user, $checklist, $request->comments));
+        }
+
+
         return redirect()->back()->with('success', 'Status updated successfully');
     }
 
-    function loadPeriod() {}
+    function loadPeriod() {
+        
+    }
 
-    public function manageFiles()
-    {
+    public function manageFiles() {
         $url = url('files');
         return view('admin.enrollments.files', compact('url'));
     }
 
-    public function verifyApplication($course, $user_id)
-    {
+    public function verifyApplication($course, $user_id) {
 
         $application = Applications::updateOrCreate(
-            [
-                'application_id' => $user_id,
-                'scholarship_id' => $course,
-            ],
-            [
-                "verification_status" => 'Verified',
-                "stage" => '75%'
-            ]
+                        [
+                            'application_id' => $user_id,
+                            'scholarship_id' => $course,
+                        ],
+                        [
+                            "verification_status" => 'Verified',
+                            "stage" => '75%'
+                        ]
         );
 
         $this->sendEmail();
@@ -158,17 +173,16 @@ class EnrollmentsController extends Controller
         return redirect()->back()->with('success', 'Scholarship Application Successfully Verified');
     }
 
-    public function undoverifyApplication($course, $user_id)
-    {
+    public function undoverifyApplication($course, $user_id) {
 
         $application = Applications::updateOrCreate(
-            [
-                'application_id' => $user_id,
-                'scholarship_id' => $course,
-            ],
-            [
-                "verification_status" => 'Not Verified',
-            ]
+                        [
+                            'application_id' => $user_id,
+                            'scholarship_id' => $course,
+                        ],
+                        [
+                            "verification_status" => 'Not Verified',
+                        ]
         );
 
         // $this->sendEmail();
@@ -176,25 +190,23 @@ class EnrollmentsController extends Controller
         return redirect()->back()->with('success', 'Scholarship Application Undo verification successfully');
     }
 
-    public function sendEmail()
-    {
-        $email = 'trainingschool@gerties.org';
+    public function sendEmail() {
+        $user = auth()->user(); // or fetch from DB      
+        $course = 'Community Health Nursing';
 
-        Mail::to($email)->send(new VerifiedMail());
+        Mail::to($user->email)->send(new ApplicationSuccessMail());
 
         return "Email sent successfully!";
     }
 
-    public function sendBondingEmail($user)
-    {
+    public function sendBondingEmail($user) {
 
         Mail::to($user->email_)->send(new BondingFormMail());
 
         return "Email sent successfully!";
     }
 
-    public function sendShortListings(Request $r)
-    {
+    public function sendShortListings(Request $r) {
         foreach ($r->ids as $id) :
             $user = Applications::find($id);
             $this->sendBondingEmail($user);
@@ -207,8 +219,7 @@ class EnrollmentsController extends Controller
         endforeach;
     }
 
-    public function sendPaymentVerification(Request $r)
-    {
+    public function sendPaymentVerification(Request $r) {
         foreach ($r->ids as $id) :
             $user = Applications::find($id);
             ///$this->sendBondingEmail($user);
@@ -218,8 +229,7 @@ class EnrollmentsController extends Controller
         endforeach;
     }
 
-    public function create()
-    {
+    public function create() {
         abort_if(Gate::denies('enrollment_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $users = User::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
@@ -229,15 +239,13 @@ class EnrollmentsController extends Controller
         return view('admin.enrollments.create', compact('users', 'courses'));
     }
 
-    public function store(StoreEnrollmentRequest $request)
-    {
+    public function store(StoreEnrollmentRequest $request) {
         $enrollment = Enrollment::create($request->all());
 
         return redirect()->route('admin.enrollments.index');
     }
 
-    public function edit(Enrollment $enrollment)
-    {
+    public function edit(Enrollment $enrollment) {
         abort_if(Gate::denies('enrollment_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $users = User::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
@@ -249,15 +257,13 @@ class EnrollmentsController extends Controller
         return view('admin.enrollments.edit', compact('users', 'courses', 'enrollment'));
     }
 
-    public function update(UpdateEnrollmentRequest $request, Enrollment $enrollment)
-    {
+    public function update(UpdateEnrollmentRequest $request, Enrollment $enrollment) {
         $enrollment->update($request->all());
 
         return redirect()->route('admin.enrollments.index');
     }
 
-    public function show(Enrollment $enrollment)
-    {
+    public function show(Enrollment $enrollment) {
         abort_if(Gate::denies('enrollment_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $enrollment->load('user', 'course');
@@ -265,8 +271,7 @@ class EnrollmentsController extends Controller
         return view('admin.enrollments.show', compact('enrollment'));
     }
 
-    public function destroy(Enrollment $enrollment)
-    {
+    public function destroy(Enrollment $enrollment) {
         abort_if(Gate::denies('enrollment_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $enrollment->delete();
@@ -274,8 +279,7 @@ class EnrollmentsController extends Controller
         return back();
     }
 
-    public function massDestroy(MassDestroyEnrollmentRequest $request)
-    {
+    public function massDestroy(MassDestroyEnrollmentRequest $request) {
         Enrollment::whereIn('id', request('ids'))->delete();
 
         return response(null, Response::HTTP_NO_CONTENT);

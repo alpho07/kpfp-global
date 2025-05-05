@@ -229,7 +229,7 @@ a:focus, .button:focus, button:focus, .btn:focus {
 
 /* line 126, E:/172 Etrain Education/172_Etrain_Education_html/sass/_common.scss */
 .section_tittle {
-  margin-bottom: 110px;
+  margin-bottom: 50px;
 }
 
 @media (max-width: 576px) {
@@ -332,7 +332,7 @@ a:focus, .button:focus, button:focus, .btn:focus {
   /* line 140, E:/172 Etrain Education/172_Etrain_Education_html/sass/_common.scss */
   .section_tittle h2 {
     font-size: 30px;
-    line-height: 40px;
+    line-height: 20px;
   }
 }
 

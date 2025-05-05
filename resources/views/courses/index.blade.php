@@ -6,7 +6,7 @@
             <div class="row justify-content-center">
                 <div class="col-xl-12">
                     <div class="section_tittle text-center">
-                        <h3><a href="{{ route('home') }}" class="btn btn-primary">Back</a> | {{$inst->name}} / Scholarship</h3>
+                        <h3><a href="{{ route('home') }}" class="btn btn-primary">Back</a> | {{$inst->name}} / Scholarship(s)</h3>
                     </div>
                 </div>
             </div>
@@ -17,7 +17,7 @@
                         @foreach ($courses as $course)
                             <li class="course-item" onclick="selectCourse(this)">
                                 <a href="{{ route('courses.show', $course->id) }}">
-                                    <h4>{{ $course->name }}</h4>
+                                    <h4>{{ $course->course->name .' - '.$course->course->category->name .' ('.$course->course->period->name .')' }}</h4>
                                 </a>
                             </li>
                         @endforeach

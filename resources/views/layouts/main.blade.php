@@ -133,6 +133,15 @@
 
             return isValid;
         }
+        
+         $("#DOBPicker").datepicker({
+            dateFormat: "yy-mm-dd", // Preferred date format
+            changeMonth: true, // Enable month dropdown
+            changeYear: true, // Enable year dropdown
+            yearRange: "1920:2016", // Show years from 1920 to 2016
+            defaultDate: new Date(2016, 0, 1) // Open calendar at 2016
+
+        });
 
 
 

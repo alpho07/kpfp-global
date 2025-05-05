@@ -107,6 +107,7 @@
 
                             @guest
                                 <div class="form-group password-container">
+                                    <span>Password must have 8 Characters and atleast one capital letter, on number and one symbol and not #</span>
                                     <input type="password" name="password" id="password" placeholder="Password" required
                                         class="form-control">
                                     <span class="toggle-password" onclick="togglePassword('password')">

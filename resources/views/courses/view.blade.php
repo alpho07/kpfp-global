@@ -825,8 +825,8 @@
 
                             <tr>
                                 <td colspan="4">
-                                    <b>THE PREAUTHORIZING ENTITY<br>
-                                        Statement of Release by Authorizing Officer:</b>
+                                    <b>THE CONFIRMING ENTITY<br>
+                                        Statement by Confirming Officer:</b>
                                     <p></p>
                                     <p></p>
                                     <p>
@@ -851,14 +851,12 @@
                                     Designation of authorizing officer:
                                     <br>
 
-                                    <b><i>County employees should seek authorization from
-                                        the County Executive Committee Member-Health (CECM-H)<br>
+                                    <i><strong>Example:</strong>  County employees should seek confirmation only from the Chief Officer of Health (COH)<br>
                                             <p>
-                                                In the absence of the CECM-Health, the Chief Officer of Health (COH) can preauthorize
+                                                In the absence of the COH, the officer acting in the capacity of the COH should confirm but the form must bear the stamp of the COH. 
                                             </p>
-                                            In the absence of the CECM-Health and COH, the County Secretary can preauthorize.
-                                        </i></b>
-                                    <p></p>
+                                        </i>
+                                    
 
                                     Department of authorizing officer:
                                 </td>

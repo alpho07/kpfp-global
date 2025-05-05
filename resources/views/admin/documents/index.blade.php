@@ -125,7 +125,7 @@
                                     {{ $document->document->file_name.'.v'.$document->version ?? '' }}
                                 </td>
                                 <td>
-                                    {{ $document->course->name ?? '' }}
+                                    {{ $document->course->course_manager->name ?? '' }}
                                 </td>
                                 <td>
                                     {{ $document->institution->name ?? '' }}

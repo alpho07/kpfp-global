@@ -1,41 +1,24 @@
-<footer class="footer-area">
+<footer class="footer-area mt-5">
     <div class="container">
         <div class="row justify-content-between">
-            <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="col-sm-6 col-md-2 col-xl-2">
                 <div class="single-footer-widget footer_1">
-                    <a href="index.html"> <img src="{{ asset('img/logo.png') }}" alt=""> </a>
+                    <a href="index.html"> <img src="{{ asset('img/logo.png') }}" style="border-radius: 50%;" alt=""> </a>
 
 
                    <p>&copy {{date('Y')}} Kenya Paediatric Association LTD.</p>
 
                 </div>
             </div>
-            <div class="col-sm-6 col-md-4 col-xl-4">
+            <div class="col-sm-6 col-md-6 col-xl-6">
                 <div class="single-footer-widget footer_2">
-                    <h4>Subscribe to our Newsletter</h4>
-                    <p>Enter your Email address.
-                        We promise not to send you spam emails
-                    </p>
-                    <form action="#">
-                        <div class="form-group">
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder='Enter email address'
-                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter email address'">
-                                <div class="input-group-append">
-                                    <button class="btn btn_1" type="button"><i class="ti-angle-right"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="social_icon">
-                        <a href="#"> <i class="ti-facebook"></i> </a>
-                        <a href="#"> <i class="ti-twitter-alt"></i> </a>
-                        <a href="#"> <i class="ti-instagram"></i> </a>
-                        <a href="#"> <i class="ti-skype"></i> </a>
-                    </div>
+                    <h4>Our Parnters</h4>
+                    <img src="{{asset('img/kpa_logo.png')}}"  alt="Our Partner Logos"/>
+                  
+                    
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6 col-md-4">
+            <div class="col-xl-3 col-sm-2 col-md-2">
                 <div class="single-footer-widget footer_2">
                     <h4>Contact us</h4>
                     <div class="contact_info">

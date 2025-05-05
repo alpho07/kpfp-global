@@ -9,12 +9,60 @@
     <div class="card-body">
         <form action="{{ route("admin.users.store") }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                <label for="name">{{ trans('cruds.user.fields.name') }}*</label>
-                <input type="text" id="name" name="name" class="form-control" value="{{ old('name', isset($user) ? $user->name : '') }}" required>
+            <div class="form-group {{ $errors->has('first_name') ? 'has-error' : '' }}">
+                <label for="name">First Name*</label>
+                <input type="text" id="first_name" name="first_name" class="form-control" value="{{ old('first_name', isset($user) ? $user->first_name : '') }}" required>
+                @if($errors->has('first_name'))
+                    <em class="invalid-feedback">
+                        {{ $errors->first('first_name') }}
+                    </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('cruds.user.fields.name_helper') }}
+                </p>
+            </div>
+            <div class="form-group {{ $errors->has('middle_name') ? 'has-error' : '' }}">
+                <label for="name">Middle name*</label>
+                <input type="text" id="middle_name" name="middle_name" class="form-control" value="{{ old('middle_name', isset($user) ? $user->middle_name : '') }}" required>
                 @if($errors->has('name'))
                     <em class="invalid-feedback">
-                        {{ $errors->first('name') }}
+                        {{ $errors->first('middle_name') }}
+                    </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('cruds.user.fields.name_helper') }}
+                </p>
+            </div>
+            <div class="form-group {{ $errors->has('last_name') ? 'has-error' : '' }}">
+                <label for="name">Last Name*</label>
+                <input type="text" id="last_name" name="last_name" class="form-control" value="{{ old('last_name', isset($user) ? $user->last_name : '') }}" required>
+                @if($errors->has('last_name'))
+                    <em class="invalid-feedback">
+                        {{ $errors->first('last_name') }}
+                    </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('cruds.user.fields.name_helper') }}
+                </p>
+            </div>
+            <div class="form-group {{ $errors->has('id_number') ? 'has-error' : '' }}">
+                <label for="name">ID Number*</label>
+                <input type="text" id="id_number" name="id_number" class="form-control" value="{{ old('id_number', isset($user) ? $user->id_number : '') }}" required>
+                @if($errors->has('id_number'))
+                    <em class="invalid-feedback">
+                        {{ $errors->first('id_number') }}
+                    </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('cruds.user.fields.name_helper') }}
+                </p>
+            </div>
+            <div class="form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
+                <label for="name">Phone Number*</label>
+                <input type="number" id="phone" name="phone" class="form-control" value="{{ old('phone', isset($user) ? $user->phone : '') }}" required>
+                @if($errors->has('phone'))
+                    <em class="invalid-feedback">
+                        {{ $errors->first('phone') }}
                     </em>
                 @endif
                 <p class="helper-block">
@@ -78,8 +126,8 @@
                 @endif
             </div>
 
-            <div class="form-group {{ $errors->has('institution_id') ? 'has-error' : '' }}" id="institutionGroup" style="{{ in_array(2, old('roles', [])) ? '' : 'display:none'}}">
-                <label for="institution">{{ trans('cruds.user.fields.institution') }}</label>
+            <div class="form-group {{ $errors->has('institution_id') ? 'has-error' : '' }}" id="institutionGroup" style="{{ in_array(2, old('roles', [])) ? '' : 'display:block'}}">
+                <label for="institution">Department</label>
                 <select name="institution_id" id="institution" class="form-control select2">
                     @foreach($institutions as $id => $institution)
                         <option value="{{ $id }}" {{ (isset($user) && $user->institution ? $user->institution->id : old('institution_id')) == $id ? 'selected' : '' }}>{{ $institution }}</option>
@@ -104,12 +152,12 @@
 @section('scripts')
 <script>
 $(document).ready(function() {
-    $('#roles').change(function() {
-        if($("#roles option:selected:contains('Institution')").val())
-            $("#institutionGroup:hidden").show(150);
-        else
-            $("#institutionGroup:visible").hide(150);
-    });
+   // $('#roles').change(function() {
+     //   if($("#roles option:selected:contains('Department')").val())
+      //      $("#institutionGroup:hidden").show(150);
+       // else
+        //    $("#institutionGroup:visible").hide(150);
+    //});
 });
 </script>
 @endsection

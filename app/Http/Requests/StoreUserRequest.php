@@ -20,8 +20,22 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'     => [
-                'required', new MoreThanOneWord
+            'first_name'     => [
+                'required'
+            ],
+            'middle_name'     => [
+                'sometimes'
+            ],
+            'last_name'     => [
+                'required'
+            ],
+            'id_number'     => [
+                'required',
+                'unique:users',
+            ],
+            'phone'    => [
+                'required',
+                'unique:users',
             ],
             'email'    => [
                 'required',

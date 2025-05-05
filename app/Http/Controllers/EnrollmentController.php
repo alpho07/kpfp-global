@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\ApplicantsUploads;
 use App\Mail\PreAuthMail;
+use App\Mail\EnrollSuccessMail;
+use App\Mail\UploadRnBFMail;
 use App\Models\AcademicHistory;
 use App\Models\Applications;
 use App\Models\Checklist;
@@ -25,21 +27,17 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
-class EnrollmentController extends Controller
-{
-
+class EnrollmentController extends Controller {
 
     use HandlesChecklist;
 
-    public function create()
-    {
+    public function create() {
         // $breadcrumb = "Enroll in $course->name course";
 
         return view('enrollment.enroll');
     }
 
-    public function store(Request $request, Course $course)
-    {
+    public function store(Request $request, Course $course) {
         if (auth()->guest()) {
             $request->validate([
                 'first_name' => ['required', 'string', 'max:25'],
@@ -50,37 +48,35 @@ class EnrollmentController extends Controller
                 'password' => [
                     'required',
                     'string',
-                    'min:8',            // Minimum 8 characters
+                    'min:8', // Minimum 8 characters
                     'regex:/[A-Za-z]/', // At least one letter
-                    'regex:/\d/',       // At least one number
+                    'regex:/\d/', // At least one number
                     'regex:/[@$!%*?&]/', // At least one symbol
-                    'confirmed',        // Match password_confirmation
+                    'confirmed', // Match password_confirmation
                 ],
                 'gender' => 'required|string',
                 'phone' => 'required|string|max:20|unique:users',
                 'dob' => 'required|date',
-                //'country' => 'required',
-                //'county' => 'sometimes|nullable',
-            ], [
+                    //'country' => 'required',
+                    //'county' => 'sometimes|nullable',
+                    ], [
                 'password.regex' => 'Password must include at least 8 characters, one letter, one number, and one symbol (@, $, !, %, *, &, etc.).',
                 'password.confirmed' => 'Passwords do not match.',
             ]);
 
-
             $user = User::create([
-                'first_name' => $request->input('first_name'),
-                'middle_name' => $request->input('middle_name'),
-                'last_name' => $request->input('last_name'),
-                'id_number' => $request->input('id_number'),
-                'email' => $request->input('email'),
-                'password' => Hash::make($request->input('password')),
-                'phone' => $request->input('phone'),
-                'gender' => $request->input('gender'),
-                'dob' => $request->input('dob'),
-                'country' => $request->input('country'),
-                'county' => $request->input('county'),
+                        'first_name' => $request->input('first_name'),
+                        'middle_name' => $request->input('middle_name'),
+                        'last_name' => $request->input('last_name'),
+                        'id_number' => $request->input('id_number'),
+                        'email' => $request->input('email'),
+                        'password' => Hash::make($request->input('password')),
+                        'phone' => $request->input('phone'),
+                        'gender' => $request->input('gender'),
+                        'dob' => $request->input('dob'),
+                        'country' => $request->input('country'),
+                        'county' => $request->input('county'),
             ]);
-
 
             $user->assignRole('Student');
 
@@ -92,39 +88,37 @@ class EnrollmentController extends Controller
         return redirect()->route('enroll.myCourses');
     }
 
-    public function handleLogin(Course $course)
-    {
+    public function handleLogin(Course $course) {
 
         return redirect()->route('enroll.create', $course->id);
     }
 
-    public function myCourses()
-    {
+    public function myCourses() {
         $breadcrumb = "MY SCHOLARSHIP APPLICATIONS";
         $user_id = auth()->user()->id;
         $checklist = $this->getChecklistHandler();
-        $enrollments =  $checklist::where('application_id', $user_id)->with('application')->get();
+        $enrollments = $checklist::where('application_id', $user_id)->with(['application', 'institution'])->get();
 
         // return $enrollments;
 
         return view('enrollment.courses', compact(['breadcrumb', 'enrollments']));
     }
 
-    function getall()
-    {
-        $application = Checklist::with(['application', 'academicHistory', 'qualificationAttained', 'professionalReference', 'employment', 'disclaimer'])->get();
+    function getall() {
+        $application = Checklist::with(['application', 'academicHistory', 'qualificationAttained', 'professionalReference', 'employment', 'disclaimer', 'institution'])->get();
         return $application;
     }
 
-    public function proof_of_payment(Applications $scholarship, Course $course)
-    {
+    public function proof_of_payment(Applications $scholarship, Course $course) {
         $user_id = auth()->user()->id;
         $payment_details = ModeOfPayment::where('institution_id', $course->institution_id)->get();
+        if ($payment_details->count() < 1) {
+            return back()->with(['error' => 'Sorry, Organization has not set mode of payment yet. Try again later']);
+        }
         return view('courses.proof_of_payment', compact('course', 'user_id', 'payment_details', 'scholarship'));
     }
 
-    public function apply($checklist_id = 0, Course $course, Request $r)
-    {
+    public function apply($checklist_id = 0, Course $course, Request $r) {
 
 
         $step = request('q');
@@ -132,27 +126,23 @@ class EnrollmentController extends Controller
         $documents = UploadsManager::all();
         $uploaded_documents = ApplicantsUploads::where('student_id', $user_id)->where('course_id', $course->id)->where('institution_id', $course->institution_id)->get();
 
-
-
         // Calculate progress
         $totalDocuments = 4; // denominator
         $uploadedCount = $uploaded_documents->count(); // numerator
         //dd($uploaded_documents);
         $progress = $totalDocuments > 0 ? ($uploadedCount / $totalDocuments) * 100 : 0;
 
-
         if ($checklist_id != 0) {
 
             $checklist = Checklist::with(['application', 'academicHistory', 'qualificationAttained', 'professionalReference', 'employment', 'disclaimer'])
-                ->where('id', $checklist_id)
-                ->get();
+                    ->where('id', $checklist_id)
+                    ->get();
         } else {
             $checklist = Checklist::where('application_id', $user_id)->where('scholarship_id', $course->id)->where('institution_id', $course->institution_id)->get();
         }
 
         $course->load('institution');
         $breadcrumb = $course->name;
-
 
         $application = [0 => $checklist[0]['application'] ?? []];
         $academic_history = $checklist[0]['academicHistory'] ?? [];
@@ -161,29 +151,24 @@ class EnrollmentController extends Controller
         $employment = $checklist[0]['employment'] ?? [];
         $disclaimer = [0 => $checklist[0]['disclaimer'] ?? []];
 
-        return view('courses.apply', compact(['course', 'uploaded_documents', 'breadcrumb', 'checklist', 'step', 'application', 'academic_history', 'qualification_attained', 'professional_reference', 'employment', 'disclaimer', 'documents','progress']));
+        return view('courses.apply', compact(['course', 'uploaded_documents', 'breadcrumb', 'checklist', 'step', 'application', 'academic_history', 'qualification_attained', 'professional_reference', 'employment', 'disclaimer', 'documents', 'progress']));
     }
 
-
-    public function upload($checklist_id = 0, Course $course, Request $request)
-    {
+    public function upload($checklist_id = 0, Course $course, Request $request) {
         $request->validate([
             'document' => 'required|mimes:pdf,jpg,jpeg,png|max:2048',
             'document_id' => 'required|exists:uploads_managers,id',
         ]);
 
-
-
         $student = auth()->user();
         $document = UploadsManager::findOrFail($request->document_id);
         // $course = Course::findOrFail($course_id);
-
         // Get previous uploads for this document
         $previousUpload = ApplicantsUploads::where('student_id', $student->id)
-            ->where('document_id', $document->id)
-            ->where('course_id', $course->id)
-            ->orderBy('version', 'desc')
-            ->first();
+                ->where('document_id', $document->id)
+                ->where('course_id', $course->id)
+                ->orderBy('version', 'desc')
+                ->first();
 
         // Determine new version number
         $newVersion = $previousUpload ? $previousUpload->version + 1 : 1;
@@ -209,30 +194,25 @@ class EnrollmentController extends Controller
             'version' => $newVersion, // Add a version column in your DB
         ]);
 
-        return redirect()->route('apply.scholarship', [$checklist_id, $course->id, 'q=#step-2'])->with('success',    $originalName . ' Document uploaded successfully!');
+        return redirect()->route('apply.scholarship', [$checklist_id, $course->id, 'q=#step-2'])->with('success', $originalName . ' Document uploaded successfully!');
     }
 
-
-
-    public function upload_other(Applications $scholarship, Course  $course, Request $request)
-    {
+    public function upload_other(Applications $scholarship, Course $course, Request $request) {
 
         $request->validate([
             'document' => 'required|mimes:pdf,zip,xlsx,docx,doc,xls|max:2048',
             'document_id' => 'required|exists:uploads_managers,id',
         ]);
 
-
         $student = User::find($scholarship->application_id);
         $document = UploadsManager::findOrFail($request->document_id);
         // $course = Course::findOrFail($course_id);
-
         // Get previous uploads for this document
         $previousUpload = ApplicantsUploads::where('student_id', $student->id)
-            ->where('document_id', $document->id)
-            ->where('course_id', $course->id)
-            ->orderBy('version', 'desc')
-            ->first();
+                ->where('document_id', $document->id)
+                ->where('course_id', $course->id)
+                ->orderBy('version', 'desc')
+                ->first();
 
         // Determine new version number
         $newVersion = $previousUpload ? $previousUpload->version + 1 : 1;
@@ -250,19 +230,18 @@ class EnrollmentController extends Controller
 
         // Save file reference with versioning
         $last_id = ApplicantsUploads::create([
-            'student_id' => $student->id,
-            'document_id' => $document->id,
-            'institution_id' => $course->institution_id,
-            'course_id' => $course->id,
-            'file_path' => $filePath,
-            'version' => $newVersion, // Add a version column in your DB
-        ])->id;
-
+                    'student_id' => $student->id,
+                    'document_id' => $document->id,
+                    'institution_id' => $course->institution_id,
+                    'course_id' => $course->id,
+                    'file_path' => $filePath,
+                    'version' => $newVersion, // Add a version column in your DB
+                ])->id;
 
         if ($request->document_id == 14) {
 
             $scholarship->update([
-                'authorized_form' => $last_id,
+                'proof_of_payment' => $last_id,
                 'stage' => '50%'
             ]);
         } elseif ($request->document_id == 15) {
@@ -278,16 +257,23 @@ class EnrollmentController extends Controller
                 'stage' => '100%',
                 'status' => 'Selected'
             ]);
-              return redirect()->route('admin.home')->with('success',    $originalName . ' Document uploaded successfully!');
+            Mail::to($student->email)->send(new EnrollSuccessMail($student, $course));
+            return redirect()->route('admin.home')->with('success', $originalName . ' Document uploaded successfully!');
+        } elseif ($request->document_id == 17) {
+
+            $scholarship->update([
+                'release_and_bonding_form' => $last_id
+            ]);
+            Mail::to($student->email)->send(new UploadRnBFMail($student, $course));
+            return redirect()->route('admin.home')->with('success', $originalName . ' Release & Bonding uploaded successfully!');
         }
 
 
 
-         return redirect()->route('enroll.myCourses')->with('success',    $originalName . ' Document uploaded successfully!');
+        return redirect()->route('enroll.myCourses')->with('success', $originalName . ' Document uploaded successfully!');
     }
 
-    public function uploadProofOfPayment(Request $request, $scholarship, $user_id)
-    {
+    public function uploadProofOfPayment(Request $request, $scholarship, $user_id) {
 
         $combined = $scholarship . $user_id . '_';
 
@@ -306,36 +292,32 @@ class EnrollmentController extends Controller
         $file->storeAs('public/files/proof_of_payments/', $fileName);
 
         $last_id = PaymentProof::updateOrCreate(
-            [
-                'application_id' => $user_id,
-                'scholarship_id' => $scholarship,
-            ],
-            [
-                'link' => 'files/proof_of_payments/' . $fileName,
-                'proof' => '1'
-            ]
+                        [
+                            'application_id' => $user_id,
+                            'scholarship_id' => $scholarship,
+                        ],
+                        [
+                            'link' => 'files/proof_of_payments/' . $fileName,
+                            'proof' => '1'
+                        ]
         );
 
         return redirect()->route('enroll.myCourses')->with('success', 'Proof of payment has been successfully uploaded.');
     }
 
-    public function completedApplication()
-    {
+    public function completedApplication() {
         return view('courses.completed');
     }
 
-    public function getForm(Applications $scholarship, Course $course)
-    {
+    public function getForm(Applications $scholarship, Course $course) {
         return view('courses.upload', compact('scholarship', 'course'));
     }
 
-    public function uploadBondingForm($id)
-    {
-        return view('courses.upload_bonding', compact('id'));
+    public function uploadBondingForm(Applications $scholarship, Course $course) {
+        return view('courses.upload_bonding', compact('scholarship', 'course'));
     }
 
-    public function sendEmail()
-    {
+    public function sendEmail() {
         $email = 'trainingschool@gerties.org';
 
         Mail::to($email)->send(new PreAuthMail());
@@ -343,8 +325,7 @@ class EnrollmentController extends Controller
         return "Email sent successfully!";
     }
 
-    public function uploadForm(Applications $scholarship, Course $course, Request $request)
-    {
+    public function uploadForm(Applications $scholarship, Course $course, Request $request) {
 
         $user = auth()->user();
 
@@ -354,23 +335,20 @@ class EnrollmentController extends Controller
 
         $file = $request->file('pdf_file');
 
-        $fileName = date('Y_m_d') . '_pre_auth_form_' .   $user->first_name . '_' .   $user->last_name . '.' . $file->getClientOriginalExtension();
+        $fileName = date('Y_m_d') . '_pre_auth_form_' . $user->first_name . '_' . $user->last_name . '.' . $file->getClientOriginalExtension();
 
-
-        $filePath =  $file->storeAs("files/pre_auth_forms/{$course->institution_id}/{$course->id}/{$scholarship->application_id}_{$user->first_name}_{$user->last_name}", $fileName, 'public');
+        $filePath = $file->storeAs("files/pre_auth_forms/{$course->institution_id}/{$course->id}/{$scholarship->application_id}_{$user->first_name}_{$user->last_name}", $fileName, 'public');
         $scholarship->update([
             'authorized_form' => $filePath,
             'stage' => '50%'
         ]);
-
 
         //$this->sendEmail();
 
         return redirect()->route('enroll.myCourses')->with('success', 'Pre-auth file uploaded successfully!');
     }
 
-    public function uploadBonding(Request $request, $id)
-    {
+    public function uploadBonding(Request $request, $id) {
 
 
         $request->validate([
@@ -383,10 +361,10 @@ class EnrollmentController extends Controller
         $file->storeAs('public/files/bonding_forms', $fileName);
 
         $last_id = Applications::where('id', $id)->update(
-            [
-                'bonding_form' => 'files/bonding_forms/' . $fileName,
-                'stage' => '100%'
-            ]
+                [
+                    'bonding_form' => 'files/bonding_forms/' . $fileName,
+                    'stage' => '100%'
+                ]
         );
 
         //$this->sendEmail();
@@ -394,14 +372,12 @@ class EnrollmentController extends Controller
         return redirect()->back()->with('success', 'Bonding form  uploaded successfully!');
     }
 
-    public function generatePdf($checklist_id, Course $course)
-    {
+    public function generatePdf($checklist_id, Course $course) {
         $checklist = Checklist::with(['application', 'academicHistory', 'qualificationAttained', 'professionalReference', 'employment', 'disclaimer'])
-            ->where('id', $checklist_id)
-            ->get();
+                ->where('id', $checklist_id)
+                ->get();
 
         $uploaded_documents = ApplicantsUploads::where('student_id', auth()->user()->id)->where('course_id', $course->id)->where('institution_id', $course->institution_id)->get();
-
 
         $application = [0 => $checklist[0]['application']];
         $academic_history = $checklist[0]['academicHistory'];
@@ -426,11 +402,10 @@ class EnrollmentController extends Controller
         $pdf->setPaper('a4')->setOrientation('portrait')->setOption('margin-left', 5)->setOption('margin-right', 10);
 
         // Download the PDF
-        return $pdf->download($checklist_id   . '_' . auth()->user()->first_name . '_' . auth()->user()->last_name . '_scholarship_application.pdf');
+        return $pdf->download($checklist_id . '_' . auth()->user()->first_name . '_' . auth()->user()->last_name . '_scholarship_application.pdf');
     }
 
-    public function show($course, $user_id)
-    {
+    public function show($course, $user_id) {
         $checklist = Checklist::where('application_id', $user_id)->where('scholarship_id', $course)->get();
         $application = Applications::where('application_id', $user_id)->where('scholarship_id', $course)->get();
         $academic_history = AcademicHistory::where('application_id', $user_id)->where('scholarship_id', $course)->get();
@@ -443,8 +418,7 @@ class EnrollmentController extends Controller
         return view('courses.view', compact(['checklist', 'application', 'academic_history', 'qualification_attained', 'professional_reference', 'employment', 'disclaimer']));
     }
 
-    public function sanitizeInput($input)
-    {
+    public function sanitizeInput($input) {
         // Remove HTML tags and encode special characters
         $sanitizedInput = filter_var($input, FILTER_SANITIZE_STRING);
 

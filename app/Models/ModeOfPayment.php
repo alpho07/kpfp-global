@@ -33,6 +33,7 @@ class ModeOfPayment extends BaseModel
         'account_name',
         'account_number',
         'amount',
+        'status',
         'created_at',
         'updated_at',
         'deleted_at',

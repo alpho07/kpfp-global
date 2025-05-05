@@ -19,13 +19,13 @@ class UpdateCourseRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'           => [
+            'manager_id'           => [
                 'required',
-                'unique:courses,name,' . request()->route('course')->id,
+                'integer',
             ],
             'institution_id' => [
                 'required',
-                'integer',
+                //'integer',
             ],
             'disciplines.*'  => [
                 'integer',

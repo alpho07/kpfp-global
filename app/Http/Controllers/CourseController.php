@@ -14,7 +14,7 @@ class CourseController extends Controller
     {
         $institution = $r->input('institution');
         $inst = Institution::find($institution);
-        $courses = Course::searchResults()->paginate(6);
+        $courses = Course::searchResults()->paginate(10);
         $breadcrumb = "Courses";
         return view('courses.index', compact(['courses', 'breadcrumb', 'inst']));
     }

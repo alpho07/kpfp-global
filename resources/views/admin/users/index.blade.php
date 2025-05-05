@@ -29,6 +29,12 @@
                             {{ trans('cruds.user.fields.name') }}
                         </th>
                         <th>
+                            National ID
+                        </th>
+                        <th>
+                            Phone
+                        </th>
+                        <th>
                             {{ trans('cruds.user.fields.email') }}
                         </th>
 
@@ -41,7 +47,7 @@
                         </th>
 
                         <th>
-                           Account Verified Status
+                           Active?
                         </th>
                         <th>
                             &nbsp;
@@ -58,8 +64,14 @@
                                 {{ $user->id ?? '' }}
                             </td>
                             <td>
-                                {{ $user->name ?? '' }}
+                                {{ $user->full_name ?? '' }}
                             </td>
+                            <td>
+                                {{ $user->id_number ?? '' }} 
+                            </td>
+                            <td>
+                                 {{ $user->phone ?? '' }}
+                            </td>    
                             <td>
                                 {{ $user->email ?? '' }}
                             </td>
@@ -70,7 +82,7 @@
                                 @endforeach
                             </td>
                             <td>
-                                {{ $user->institution->name ?? '' }}
+                                {{ $user->institution->name ?? '-' }}
                             </td>
                             <td>
                                 <span class="{{$user->is_verified=='true' ? 'badge badge-success' : 'badge badge-danger'}}">{{ ucfirst($user->is_verified) ?? '' }}</span>

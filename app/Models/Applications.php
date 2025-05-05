@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Applications extends Model
-{
+class Applications extends Model {
+
     //use HasFactory;
 
 
 
     protected $fillable = [
-        "id",  //primary key increments
+        "id", //primary key increments
         'checklist',
         'status',
         "application_id", //bigInteger nulled
@@ -43,14 +43,12 @@ class Applications extends Model
         "training_institution_with", //string
         "funding_source", //string
         "funding_source_yes_desc", //string
-
         "supervisor_title", //required
         "supervisor_full_name", //required
         "supervisor_designation", //required
         "supervisor_phone_no",
         "supervisor_email",
         "supervisor_department",
-
         "emergency_first_name", //string
         "emergency_surname", //string
         "emergency_title", //string
@@ -65,20 +63,27 @@ class Applications extends Model
         "reference_previous_3", //string
         "authorized",
         "verification_status",
+        "proof_of_payment",
+        "release_and_bonding_form",
         "comments",
         "verified_by",
         'stage',
         'payment_verified'
-
     ];
 
-    function authorized_form_link(): HasOne
-    {
-        return $this->hasOne(ApplicantsUploads::class, 'id','authorized_form');
+    function authorized_form_link(): HasOne {
+        return $this->hasOne(ApplicantsUploads::class, 'id', 'authorized_form');
     }
 
-    function bonding_form_link(): HasOne
-    {
-        return $this->hasOne(ApplicantsUploads::class, 'id','bonding_form');
+    function bonding_form_link(): HasOne {
+        return $this->hasOne(ApplicantsUploads::class, 'id', 'bonding_form');
+    }
+
+    function proof_of_payment_link(): HasOne {
+        return $this->hasOne(ApplicantsUploads::class, 'id', 'proof_of_payment');
+    }
+
+    function release_and_bonding_form_link(): HasOne {
+        return $this->hasOne(ApplicantsUploads::class, 'id', 'release_and_bonding_form');
     }
 }

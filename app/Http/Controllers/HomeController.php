@@ -11,8 +11,8 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $newestCourses = Course::orderBy('id', 'desc')->take(3)->get();
-        $randomInstitutions = Institution::whereNotIn('id', [8])->get();
+        $newestCourses =[];// Course::orderBy('id', 'desc')->take(3)->get();
+        $randomInstitutions = Institution::with('courses')->whereNotIn('id', [3])->get();
 
         return view('home', compact(['newestCourses', 'randomInstitutions']));
     }

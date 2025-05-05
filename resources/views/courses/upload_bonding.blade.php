@@ -55,7 +55,7 @@
 
         <div class="container card">
             <div class="card-title">
-                <h4>Upload KPFP archieved documents</h4>
+                <h4>KPFP: Upload Filled Release and Bonding Form documents</h4>
             </div>
             <div class="card-body">
                 <div class="" style="color:black;font-weight: bold;">
@@ -72,11 +72,22 @@
                                 @endforeach
                             </div>
                         @endif
-                    <form action="{{ route('bonding.form.save', $id) }}" method="post"
+                        <div class="row">
+                            <ol>
+                                <li>Scan Your dully filled and stamped <b>Release form</b> to pdf</li>
+                                <li>Scan Your dully filled and stamped <b>Bonding form</b> to pdf</li>
+                                <li>Combine the two scanned documents as one document in PDF Format</li>
+                                <li>If combining the documents is problematic, Archive them together in one zip file</li>
+                                <li>Upload the document/zip in the provided upload field below</li>
+                                <li>On success, please wait for the institution to get back</li>
+                            </ol>
+                        </div>
+                    <form action="{{ route('pre.auth.save',[$scholarship->id, $course->id]) }}" method="post"
                         enctype="multipart/form-data">
                         @csrf
-                        <small class="alert alert info">***Only zip archieved files accepted</small><br>
-                        <input type="file" name="pdf_file" class="form-control" required accept=".zip">
+                        <input type="hidden" name="document_id" value="17"/>
+                        <small class="alert alert info">***Only pdf/zip files accepted</small><br>
+                        <input type="file" name="document" class="form-control" required accept=".pdf,.zip">
                         <p class="mt-2"></p>
                         <button type="submit" class="btn btn-primary">Upload</button>
                     </form>

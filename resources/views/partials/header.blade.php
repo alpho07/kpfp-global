@@ -3,8 +3,8 @@
         <div class="row align-items-center">
             <div class="col-lg-12">
                 <nav class="navbar navbar-expand-lg navbar-light">
-                    <a class="navbar-brand logo_1" href="{{ route('home') }}"> <img src="{{ asset('img/single_page_logo.png') }}" alt="logo"> </a>
-                    <a class="navbar-brand logo_2" href="{{ route('home') }}"> <img src="{{ asset('img/logo.png') }}" alt="logo"> </a>
+                    <a class="navbar-brand logo_1" href="{{ route('home') }}"> <img src="{{ asset('img/single_page_logo.png') }}" alt="logo"><span style="margin-top: 15px !important; margin-left: 5px !important; color:#0397D6;"> Kenya Paediatric Fellowship Program(KPFP)<br>Platform</span> </a>
+                    <a class="navbar-brand logo_2" href="{{ route('home') }}"> <img src="{{ asset('img/logo.png') }}" style="border-radius: 50%;" alt="logo"><span style="margin-top: 15px !important; margin-left: 5px !important; color:#0397D6;"> Kenya Paediatric Fellowship Program(KPFP)<br>Platform</span> </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">

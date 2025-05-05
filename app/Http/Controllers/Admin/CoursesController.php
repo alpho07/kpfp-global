@@ -10,6 +10,7 @@ use App\Http\Requests\MassDestroyCourseRequest;
 use App\Http\Requests\StoreCourseRequest;
 use App\Http\Requests\UpdateCourseRequest;
 use App\Models\Institution;
+use App\Models\CourseManager;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,8 +36,9 @@ class CoursesController extends Controller
         $institutions = Institution::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $disciplines = Discipline::all()->pluck('name', 'id');
+        $course_manager = CourseManager::all();
 
-        return view('admin.courses.create', compact('institutions', 'disciplines'));
+        return view('admin.courses.create', compact('institutions', 'disciplines','course_manager'));
     }
 
     public function store(StoreCourseRequest $request)
@@ -59,23 +61,18 @@ class CoursesController extends Controller
 
         $disciplines = Discipline::all()->pluck('name', 'id');
 
-        $course->load('institution', 'disciplines');
+        $course->load('institution', 'disciplines','course');
+        
+        $course_manager = \App\Models\CourseManager::all();
 
-        return view('admin.courses.edit', compact('institutions', 'disciplines', 'course'));
+        return view('admin.courses.edit', compact('institutions', 'disciplines', 'course','course_manager'));
     }
 
     public function update(UpdateCourseRequest $request, Course $course)
     {
+  
         $course->update($request->all());
-        $course->disciplines()->sync($request->input('disciplines', []));
-
-        if ($request->input('photo', false)) {
-            if (!$course->photo || $request->input('photo') !== $course->photo->file_name) {
-                $course->addMedia(storage_path('tmp/uploads/' . $request->input('photo')))->toMediaCollection('photo');
-            }
-        } elseif ($course->photo) {
-            $course->photo->delete();
-        }
+        $course->disciplines()->sync($request->input('disciplines', []));   
 
         return redirect()->route('admin.courses.index');
     }

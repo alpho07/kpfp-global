@@ -32,7 +32,7 @@
                             {{ trans('cruds.course.fields.description') }}
                         </th>
                         <th>
-                            {{ trans('cruds.course.fields.photo') }}
+                            Duration
                         </th>
                         <th>
                             {{ trans('cruds.course.fields.institution') }}
@@ -56,17 +56,13 @@
                                 {{ $course->id ?? '' }}
                             </td>
                             <td>
-                                {{ $course->name ?? '' }}
+                                {{ $course->course->name ?? '' }}
                             </td>
                             <td>
                                 {!! \Str::words($course->description,20,'...') ?? '' !!}
                             </td>
                             <td>
-                                @if($course->photo)
-                                    <a href="{{ $course->photo->getUrl() }}" target="_blank">
-                                        <img src="{{ $course->photo->getUrl('thumb') }}" width="50px" height="50px">
-                                    </a>
-                                @endif
+                              {{$course->course->period->name}}
                             </td>
                             <td>
                                 {{ $course->institution->name ?? '' }}

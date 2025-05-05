@@ -11,14 +11,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
-class ChecklistStudent extends Model
-{
+class ChecklistStudent extends Model {
+
     use HasFactory;
 
     protected $table = 'checklists';
-
-
-
     protected $fillable = [
         'scholarship_id',
         'application_id',
@@ -34,45 +31,39 @@ class ChecklistStudent extends Model
         'institution_id'
     ];
 
-    public function application(): HasOne
-    {
+    public function application(): HasOne {
         return $this->hasOne(Applications::class, 'checklist', 'id');
     }
 
-    public function academicHistory(): HasMany
-    {
-        return $this->hasMany(AcademicHistory::class,  'checklist', 'id');
+    public function institution(): HasOne {
+        return $this->hasOne(Institution::class, 'id', 'institution_id');
     }
 
-    public function qualificationAttained(): HasMany
-    {
-        return $this->hasMany(QualificationAttained::class,  'checklist', 'id');
+    public function course(): HasOne {
+        return $this->hasOne(\App\Models\Course::class, 'id', 'scholarship_id');
     }
 
-    public function professionalReference(): HasMany
-    {
-        return $this->hasMany(ProfessionalReference::class,  'checklist', 'id');
+    public function academicHistory(): HasMany {
+        return $this->hasMany(AcademicHistory::class, 'checklist', 'id');
     }
 
-    public function employment(): HasMany
-    {
-        return $this->hasMany(Employment::class,  'checklist', 'id');
+    public function qualificationAttained(): HasMany {
+        return $this->hasMany(QualificationAttained::class, 'checklist', 'id');
     }
 
-    public function disclaimer(): HasOne
-    {
-        return $this->hasOne(Disclaimer::class,  'checklist', 'id');
+    public function professionalReference(): HasMany {
+        return $this->hasMany(ProfessionalReference::class, 'checklist', 'id');
     }
 
+    public function employment(): HasMany {
+        return $this->hasMany(Employment::class, 'checklist', 'id');
+    }
 
+    public function disclaimer(): HasOne {
+        return $this->hasOne(Disclaimer::class, 'checklist', 'id');
+    }
 
-
-
-
-
-
-    public static function uploadAndSaveFile($fileField, UploadedFile $file, $id, $combined, $type)
-    {
+    public static function uploadAndSaveFile($fileField, UploadedFile $file, $id, $combined, $type) {
         // Generate a sanitized file name (without encrypting it)
         $fileName = $combined . '_' . date('Y_m_d') . '_' . $type . '_' . self::sanitizeInput($file->getClientOriginalName());
 
@@ -100,14 +91,13 @@ class ChecklistStudent extends Model
 
         return $fileName;
     }
-    
-    public static function sanitizeInput($input)
-    {
+
+    public static function sanitizeInput($input) {
         // Remove HTML tags and encode special characters
         $sanitizedInput = filter_var($input, FILTER_SANITIZE_STRING);
 
         // Replace special characters with underscores
-        $sanitizedInput = str_replace([' ', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '+', '=', '{', '}', '[', ']', '|', ';', ':', ',',  '<', '>', '?', '/', '\\', "'", '"', '`', '~'], '_', $sanitizedInput);
+        $sanitizedInput = str_replace([' ', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '+', '=', '{', '}', '[', ']', '|', ';', ':', ',', '<', '>', '?', '/', '\\', "'", '"', '`', '~'], '_', $sanitizedInput);
 
         // Remove consecutive underscores
         $sanitizedInput = preg_replace('/_+/', '_', $sanitizedInput);
@@ -118,8 +108,7 @@ class ChecklistStudent extends Model
         return $sanitizedInput;
     }
 
-    public static function  createFolderInPublic($folderPath)
-    {
+    public static function createFolderInPublic($folderPath) {
         // Check if the folder exists
         if (!Storage::disk('public')->exists($folderPath)) {
             // Create the folder

@@ -27,9 +27,9 @@ class SetTenantAfterLogin
         if ($user->hasRole('Student')) {
         } else {
             session([
-                'user_roles' => $user->getRoleNames()->toArray(),
-                'institution_id' => $user->institution_id,
-                'institution_name' => $user->institution->name
+                'user_roles' => @$user->getRoleNames()->toArray(),
+                'institution_id' => @$user->institution_id,
+                'institution_name' => @$user->institution->name
             ]);
         }
     }
