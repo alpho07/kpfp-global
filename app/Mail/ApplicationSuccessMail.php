@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class EnrollSuccessMail extends Mailable {
+class ApplicationSuccessMail extends Mailable {
 
     use Queueable,
         SerializesModels;
@@ -33,7 +33,7 @@ class EnrollSuccessMail extends Mailable {
      */
     public function build() {
         return $this->subject('Welcome to KPFP - Application Received')
-                        ->view('emails.enroll_successfull')
+                        ->view('emails.successfull_application')
                         ->with([
                             'user' => $this->user,
                             'courseName' => $this->courseName,

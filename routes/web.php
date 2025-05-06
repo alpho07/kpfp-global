@@ -35,7 +35,7 @@ Route::get('/home', function () {
 
 Auth::routes(['register' => false]);
 
-Route::get('/send-mail', [AdminEnrollmentsController::class, 'sendEmail'])->name('email.send');
+Route::get('/send-mail', [DefaulHomeController::class, 'sendEmail'])->name('email.send');
 
 Route::get('/', [DefaulHomeController::class, 'index'])->name('home');
 

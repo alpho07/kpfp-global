@@ -22,16 +22,29 @@
                     {{ trans('cruds.institution.fields.name_helper') }}
                 </p>
             </div>
-            <div class="form-group {{ $errors->has('description') ? 'has-error' : '' }}">
-                <label for="description">{{ trans('cruds.institution.fields.description') }}</label>
-                <textarea id="description" name="description" class="form-control ">{{ old('description', isset($institution) ? $institution->description : '') }}</textarea>
-                @if($errors->has('description'))
+            <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
+                <label for="email">Email*</label>
+                <input type="text" id="email" name="email" class="form-control" value="{{ old('email', isset($institution) ? $institution->email : '') }}" required>
+                @if($errors->has('email'))
+                <em class="invalid-feedback">
+                    {{ $errors->first('email') }}
+                </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('cruds.institution.fields.name_helper') }}
+                </p>
+            </div>
+            
+            <div class="form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
+                <label for="phone">Phone*</label>
+                <input type="text" id="phone" name="phone" class="form-control" value="{{ old('phone', isset($institution) ? $institution->phone : '') }}" required>
+                @if($errors->has('phone'))
                     <em class="invalid-feedback">
-                        {{ $errors->first('description') }}
+                        {{ $errors->first('phone') }}
                     </em>
                 @endif
                 <p class="helper-block">
-                    {{ trans('cruds.institution.fields.description_helper') }}
+                    {{ trans('cruds.institution.fields.name_helper') }}
                 </p>
             </div>
             <div class="form-group {{ $errors->has('logo') ? 'has-error' : '' }}">

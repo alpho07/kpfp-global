@@ -39,7 +39,7 @@
                                                     @foreach (\App\Models\Course::all() as $course)
                                                         <option value="{{ $course->id }}"
                                                             {{ request('course_id') == $course->id ? 'selected' : '' }}>
-                                                            {{ $course->name }}
+                                                            {{ $course->course_manager->name }}
                                                         </option>
                                                     @endforeach
                                                 </select>

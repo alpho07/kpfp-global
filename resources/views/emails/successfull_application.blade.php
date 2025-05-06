@@ -50,7 +50,7 @@
     <body>
         <div class="container">
             <div class="header">
-                <h2>Welcome to KPFP!</h2>
+                <h2>Welcome to KPFP Scholarship Platform</h2>
             </div>
 
             <div class="content">

@@ -58,7 +58,7 @@
 
                 <p>Thank you for applying to join the <strong>Kenya Public Fellowship Program (KPFP)</strong>. We're excited to inform you that your application to be enrolled in the <strong>{{ 'course' }}</strong> course has been received successfully.</p>
 
-                <p>The course you selected will take approximately <strong>{{ $courseDuration }} years</strong> to complete.</p>
+                <p>The course you selected will take approximately <strong>{{ '2' }} years</strong> to complete.</p>
 
                 <p>Your application is currently under review. It will be vetted by the institution you selected during your application. You will receive communication from them once the vetting process is complete.</p>
 

@@ -21,6 +21,8 @@ use App\Models\ChecklistStudent;
 use App\Models\Course;
 use App\Traits\HandlesChecklist;
 use Illuminate\Support\Facades\Storage;
+use App\Services\ZohoMailService;
+
 
 class ChecklistController extends Controller {
 
@@ -217,7 +219,7 @@ class ChecklistController extends Controller {
         $scholarship = $request->scholarship_id;
         $checklist = $this->getChecklist();
         $checklist_base = $checklist::with('course')->where('application_id', $auth)->where('scholarship_id', $scholarship)->first();
-       
+
         $application = Disclaimer::updateOrCreate(
                         [
                             'application_id' => auth()->user()->id,
@@ -236,8 +238,10 @@ class ChecklistController extends Controller {
         AppApplications::where('application_id', auth()->user()->id)->where('scholarship_id', $request->scholarship_id)->update(['stage' => '25%']);
         //}
         $user = auth()->user();
-       // dd($checklist_base);
-        Mail::to($user->email)->send(new ApplicationSuccessMail($user, $checklist_base));
+        // dd($checklist_base);
+        //Mail::to($user->email)->send(new ApplicationSuccessMail($user, $checklist_base));
+        $zoho = app(ZohoMailService::class);
+        $result = $zoho->sendMailable($user->email, new ApplicationSuccessMail($user, $checklist_base));
 
         return redirect()->route('enroll.myCourses')->with('success', 'Application submitted successfully!, Please download the bonding form');
     }

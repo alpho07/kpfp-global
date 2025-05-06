@@ -13,6 +13,7 @@ use App\Models\Course;
 use App\Models\Disclaimer;
 use App\Models\Employment;
 use App\Models\ModeOfPayment;
+use \App\Services\ZohoMailService;
 use App\Models\PaymentProof;
 use App\Models\ProfessionalReference;
 use App\Models\QualificationAttained;
@@ -257,14 +258,18 @@ class EnrollmentController extends Controller {
                 'stage' => '100%',
                 'status' => 'Selected'
             ]);
-            Mail::to($student->email)->send(new EnrollSuccessMail($student, $course));
+            // Mail::to($student->email)->send(new EnrollSuccessMail($student, $course));
+            $zoho = app(ZohoMailService::class);
+            $result = $zoho->sendMailable($student->email,new  EnrollSuccessMail($student, $course));
             return redirect()->route('admin.home')->with('success', $originalName . ' Document uploaded successfully!');
         } elseif ($request->document_id == 17) {
 
             $scholarship->update([
                 'release_and_bonding_form' => $last_id
             ]);
-            Mail::to($student->email)->send(new UploadRnBFMail($student, $course));
+            //Mail::to($student->email)->send(new UploadRnBFMail($student, $course));
+            $zoho = app(ZohoMailService::class);
+            $result = $zoho->sendMailable($student->email,new  UploadRnBFMail($student, $course));
             return redirect()->route('admin.home')->with('success', $originalName . ' Release & Bonding uploaded successfully!');
         }
 

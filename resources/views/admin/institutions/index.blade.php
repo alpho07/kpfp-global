@@ -29,7 +29,10 @@
                                 {{ trans('cruds.institution.fields.name') }}
                             </th>
                             <th>
-                                {{ trans('cruds.institution.fields.description') }}
+                                Email
+                            </th>
+                            <th>
+                                Phone
                             </th>
                             <th>
                                 {{ trans('cruds.institution.fields.logo') }}
@@ -52,7 +55,10 @@
                                     {{ $institution->name ?? '' }}
                                 </td>
                                 <td>
-                                    {{ $institution->description ?? '' }}
+                                    {{ $institution->email ?? '' }}
+                                </td>
+                                <td>
+                                    {{ $institution->phone ?? '' }}
                                 </td>
                                 <td>
                                     @if ($institution->logo)

@@ -17,6 +17,7 @@ use App\Mail\RejectedMail;
 use App\Mail\ApprovedMail;
 use App\Mail\ApplicationSuccessMail;
 use App\Models\User;
+use \App\Services\ZohoMailService;
 use Gate;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Http\Request;
@@ -111,9 +112,11 @@ class EnrollmentsController extends Controller {
         }
 
         $application_id->update($data);
-        
+
         if ($request->status == 'Approved') {
-            Mail::to($user->email)->send(new ApprovedMail($user, $checklist));
+            //Mail::to($user->email)->send(new ApprovedMail($user, $checklist));
+            $zoho = app(ZohoMailService::class);
+            $result = $zoho->sendMailable($user->email, new ApprovedMail($user, $checklist));
         }
 
 
@@ -135,11 +138,15 @@ class EnrollmentsController extends Controller {
         $application_id->update($data);
 
         if ($request->status == 'Query') {
-            Mail::to($user->email)->send(new QueryMail($user, $checklist, $request->comments));
+            //Mail::to($user->email)->send(new QueryMail($user, $checklist, $request->comments));
+            $zoho = app(ZohoMailService::class);
+            $result = $zoho->sendMailable($user->email, new QueryMail($user, $checklist, $request->comments));
         }
 
         if ($request->status == 'Rejected') {
-            Mail::to($user->email)->send(new RejectedMail($user, $checklist, $request->comments));
+            //Mail::to($user->email)->send(new RejectedMail($user, $checklist, $request->comments));
+            $zoho = app(ZohoMailService::class);
+            $result = $zoho->sendMailable($user->email, new RejectedMail($user, $checklist, $request->comments));
         }
 
 
