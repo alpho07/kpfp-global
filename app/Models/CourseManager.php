@@ -47,4 +47,6 @@ class CourseManager extends Model
     {
         return $this->hasOne(Period::class, 'id', 'month_id');
     }
+    
+  
 }

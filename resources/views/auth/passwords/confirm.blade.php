@@ -12,7 +12,7 @@
                         {{ __('Please confirm your password before continuing.') }}
                     </div>
 
-                    <form method="POST" action="{{ route('password.confirm') }}">
+                    <form method="POST" action="{{ route('password.confirm.custom') }}">
                         @csrf
 
                         <div class="form-group row">
@@ -36,7 +36,7 @@
                                 </button>
 
                                 @if(Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
+                                    <a class="btn btn-link" href="{{ route('password.request.custom') }}">
                                         {{ __('Forgot Your Password?') }}
                                     </a>
                                 @endif

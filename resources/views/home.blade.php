@@ -42,6 +42,11 @@
             <div class="col-xl-10">
                 <div class="section_tittle1 text-center">
                     <h3>Available Scholarships</h3>
+                    @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                    @endif
                     <div class="alert alert-info" role="alert">
                         To Apply for a Scholarship, Select the institution below, then from inside the institution page,
                         select the scholarship you are interested in.
@@ -56,27 +61,31 @@
 
             @foreach ($randomInstitutions as $institution)
             <div class="col-sm-4 col-lg-4 col-xl-4">
-                <div class="single-home-blog">
-                    <div class="card" style="padding: 10px; margin-top: 20px;">
-                        <div class="text-center mb-3">
-                            <img src="{{ $institution->logo->getUrl() }}" height="180px" width="180px" 
-                                 alt="{{ $institution->name }}" class="institution-logo">
+                <a href="{{ route('courses.index') }}?institution={{ $institution->id }}"
+                   >
+                    <div class="single-home-blog">
+                        <div class="card" style="padding: 10px; margin-top: 20px;">
+                            <div class="text-center mb-3">
+                                <img src="{{ $institution->logo->getUrl() }}" height="180px" width="180px" 
+                                     alt="{{ $institution->name }}" class="institution-logo">
+                            </div>
+
+                            <div class="card-body">
+                                <a href="{{ route('courses.index') }}?institution={{ $institution->id }}">
+                                    <h6 class="card-title">{{ $institution->name }}</h6>
+                                </a>
+                                <!--p>{{ Str::limit($institution->description, 15) }}</p-->
+                            </div>
+                            <div class="card card-footer">
+                                <a href="{{ route('courses.index') }}?institution={{ $institution->id }}"
+                                   class="btn btn-primary">View Scholarships Available ({{ $institution->courses->count()}})</a>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <a href="{{ route('courses.index') }}?institution={{ $institution->id }}">
-                                <h6 class="card-title">{{ $institution->name }}</h6>
-                            </a>
-                            <!--p>{{ Str::limit($institution->description, 15) }}</p-->
-                        </div>
-                        <div class="card card-footer">
-                            <a href="{{ route('courses.index') }}?institution={{ $institution->id }}"
-                               class="btn btn-primary">View Scholarships Available ({{ $institution->courses->count()}})</a>
-                        </div>
-                    </div>
-                </div>
+                </a>
             </div>
-            @endforeach
         </div>
+        @endforeach
     </div>
+</div>
 </section>
 @endsection

@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use League\Glide\ServerFactory;
+use App\Http\Controllers\Auth\CustomForgotPasswordController;
+use App\Http\Controllers\Auth\CustomResetPasswordController;
 
 Route::get('/home', function () {
     if (session('status')) {
@@ -32,6 +34,15 @@ Route::get('/home', function () {
 
     return redirect()->route('admin.home');
 });
+
+
+// Password reset request routes
+Route::get('/password/reset/v1', [CustomForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request.custom');
+Route::post('/password/email/v1', [CustomForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email.custom');
+
+// Password reset routes
+Route::get('/password/reset/{token}/v1', [CustomResetPasswordController::class, 'showResetForm'])->name('password.reset.custom');
+Route::post('/password/reset/v1', [CustomResetPasswordController::class, 'reset'])->name('password.update.custom');
 
 Auth::routes(['register' => false]);
 
@@ -134,6 +145,12 @@ Route::get('step-three/{checklist?}/{course?}', function ($checklist, $course) {
 })->name('step.three');
 
 Route::post('/document-upload/{checklist?}/{course?}', [EnrollmentController::class, 'upload'])->name('student.documents.upload')->middleware('auth');
+
+Route::post('/send-otp', [EnrollmentController::class,'sendOtp']);
+Route::get('/validate-otp', [EnrollmentController::class,'verify_otp'])->name('otp.verification');
+Route::post('/verify-otp', [EnrollmentController::class,'verifyOtp'])->name('otp.verify');
+
+Route::get('/post-login', [EnrollmentController::class,'postLogin'])->name('post.login')->middleware('auth');
 
 Route::group([
     'prefix' => 'admin',

@@ -29,10 +29,14 @@
             {{ session('success') }}
         </div>
         @endif
+        <div class="" >
+            <a style="float:left;" href="{{route('home')}}" class="btn btn-sm btn-primary">Apply Course</a>
+        </div>
 
 
         <div class="table-responsive">
-            <table class=" table table-bordered table-striped table-hover datatable datatable-Enrollment">
+            
+            <table class=" table table-bordered table-striped table-hover datatable datatable-Enrollment mt-2">
                 <thead>
                     <tr>
 
@@ -147,8 +151,8 @@
                                href="{{ @Storage::url($enrollment->application->authorized_form_link->file_path) }}">Download</a><br>
                             <p>Or</p>
                             <a class="btn btn-sm btn-info"
-                               href="{{ route('pre.auth.upload', [$enrollment->id, $enrollment->scholarship_id]) }}">Re-Upload!
-                                <small style="font-size: 8px;">Only if you submitted a wrong form</small>
+                               href="{{ route('pre.auth.upload', [$enrollment->id, $enrollment->scholarship_id]) }}" title="Only Re-upload if you suspect you uploaded the wrong form or if sepecifically requested to.">Re-Upload!
+                               
                             </a>
                             @endif
 

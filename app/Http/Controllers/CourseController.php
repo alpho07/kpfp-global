@@ -25,7 +25,7 @@ class CourseController extends Controller
         $breadcrumb = $course->name;
 
 
-        session(['institution_id' => $course->institution->id]);
+        session(['institution_id' => $course->institution->id,'course_id'=>$course->id]);
 
         //dd($course);
 

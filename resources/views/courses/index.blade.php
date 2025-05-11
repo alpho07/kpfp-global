@@ -13,15 +13,16 @@
             <div class="row">
 
                 <div class="col-lg-12">
-                    <ol class="course-list">
+                    <ul class="course-list">
                         @foreach ($courses as $course)
+                        
                             <li class="course-item" onclick="selectCourse(this)">
                                 <a href="{{ route('courses.show', $course->id) }}">
                                     <h4>{{ $course->course->name .' - '.$course->course->category->name .' ('.$course->course->period->name .')' }}</h4>
                                 </a>
                             </li>
                         @endforeach
-                    </ol>
+                    </ul>
                 </div>
 
                 <div class="row">

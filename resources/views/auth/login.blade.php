@@ -75,7 +75,7 @@
                         </div>
                         <div class="col-6 text-right">
                             @if(Route::has('password.request'))
-                                <a class="btn btn-link px-0" href="{{ route('password.request') }}">
+                                <a class="btn btn-link px-0" href="{{ route('password.request.custom') }}">
                                     {{ trans('global.forgot_password') }}
                                 </a><br>
                             @endif

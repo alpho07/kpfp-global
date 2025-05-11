@@ -21,7 +21,10 @@
 
                             @if(!Auth::check())
                             <li class="nav-item">
-                                <a class="nav-link btn_4" href="{{ url('login') }}">Login</a>
+                                <a style="color:white;" class="nav-link btn_4" href="{{ url('login') }}">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link btn_4" style="background:orange;color:white;" href="{{ url('enroll') }}">Register</a>
                             </li>
                             @endif
                             @auth

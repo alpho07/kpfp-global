@@ -66,7 +66,7 @@
             </div>
 
             <div class="footer">
-                &copy; {{ date('Y') }} Kenya Public Fellowship Program. All rights reserved.
+                 &copy; {{ date('Y') }} Kenya Paediatric Fellowship Program. All rights reserved.
             </div>
         </div>
     </body>

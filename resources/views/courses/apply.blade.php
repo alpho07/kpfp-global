@@ -124,6 +124,13 @@
                                                             FORM
                                                         </center>
                                                     </th>
+                                                    <tr>
+                                                    <th colspan="4">
+                                                        <center style="color:blue; font-weight: bold;">
+                                                        Application for: {{@$course->course_manager->name}} at {{@$course->institution->name}}  
+                                                      </center>
+                                                    </th>
+                                                    </tr>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -249,13 +256,10 @@
 
                                             <tr>
                                                 <td colspan="4">
-                                                    <b class="alert alert-info">All applicants are to attach
-                                                        the
-                                                        required documentation and click 'Save & Go to Application' at
-                                                        the bottom of the page to Save </b>
+                                                    <b class="alert alert-info">Please Browse and attach all the required documentation and upload each. Download_v* means document is uploaded </b>
                                                 </td>
                                             </tr>
-                                            <tr>
+                                            <!--tr>
                                                 <td colspan="2">
                                                     1. Completed KPFP sponsorship application & bonding forms;
                                                     pre-authorization (during the application), release & bonding (once
@@ -270,9 +274,9 @@
                                                 <td style="text-align: right;">
 
                                                 </td>
-                                            </tr>
+                                            </tr-->
                                             @php
-                                                $i = 2;
+                                                $i = 1;
                                             @endphp
                                             @foreach ($documents as $document)
                                                 @if ($document->id < 5)

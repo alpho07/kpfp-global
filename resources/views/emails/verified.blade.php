@@ -49,29 +49,22 @@
     </head>
     <body>
         <div class="container">
-            <div class="header">
-                <h2>Welcome to KPFP!</h2>
+            <div class="header" style='background:green; color:white;'>
+                <h2>Welcome to KPFP Scholarships Portal</h2>
             </div>
 
             <div class="content">
                 <p>Dear {{ 'me' }},</p>
 
-                <p>Thank you for applying to join the <strong>Kenya Public Fellowship Program (KPFP)</strong>. We're excited to inform you that your application to be enrolled in the <strong>{{ 'course' }}</strong> course has been received successfully.</p>
+                <p>Thank you for registering at <strong>Kenya Public Fellowship Program (KPFP) Scholarships Portal</strong>. </p>
 
-                <p>The course you selected will take approximately <strong>{{ '2' }} years</strong> to complete.</p>
+                <p>Welcome to acknowledge your application joining your fellow Applicants. Through the portal you have access to massive scholarships in various institutions that are fully provided you meet the scholarship needs</p>
 
-                <p>Your application is currently under review. It will be vetted by the institution you selected during your application. You will receive communication from them once the vetting process is complete.</p>
+                <p>Before you proceed however, Your registration details needs to be verified. Please click the link below to enter the OTP sent to you in this email</p>
 
-                <p><strong>Please ensure that you pay the required application fee (if applicable)</strong>. Applications without the fee may not be considered for vetting.</p>
+                <p>Your OTP is:<strong>{{'otp}}</strong>.</p>
 
-                <p>If you are selected, you will be contacted by the institution to:</p>
-                <ul>
-                    <li>Download the bonding form</li>
-                    <li>Fill it in <strong>triplicates</strong></li>
-                    <li>Upload the completed form together with the <strong>Release Form</strong></li>
-                </ul>
-
-                <p>Keep checking your email regularly for important updates and next steps.</p>
+                              <p>Keep checking your email regularly for important updates and next steps.</p>
 
                 <p>We wish you all the best in your application process!</p>
 

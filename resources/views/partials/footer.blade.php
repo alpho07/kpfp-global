@@ -12,19 +12,19 @@
             </div>
             <div class="col-sm-6 col-md-6 col-xl-6">
                 <div class="single-footer-widget footer_2">
-                    <h4>Our Parnters</h4>
-                    <img src="{{asset('img/kpa_logo.png')}}"  alt="Our Partner Logos"/>
+                    <h4>Our Partners</h4>
+                    <img src="{{asset('img/kpa_logo_.png')}}"  alt="Our Partner Logos"/>
                   
                     
                 </div>
             </div>
             <div class="col-xl-3 col-sm-2 col-md-2">
                 <div class="single-footer-widget footer_2">
-                    <h4>Contact us</h4>
+                    <h4>Contact Us</h4>
                     <div class="contact_info">
                         <p><span> Mobile : </span>+254 726 161590</p>
                         <p><span> Landline : </span>+254 020 2725309 / 2726298</p>
-                        <p><span> Email: </span>info@kenyapaediatric.org</p>
+                        <p><span> Email: </span>kpfp@kenyapaediatric.org</p>
                     </div>
                 </div>
             </div>

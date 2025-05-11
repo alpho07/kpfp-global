@@ -243,7 +243,7 @@ class ChecklistController extends Controller {
         $zoho = app(ZohoMailService::class);
         $result = $zoho->sendMailable($user->email, new ApplicationSuccessMail($user, $checklist_base));
 
-        return redirect()->route('enroll.myCourses')->with('success', 'Application submitted successfully!, Please download the bonding form');
+        return redirect()->route('enroll.myCourses')->with('success', 'Application submitted successfully!,Please check your email for next steps');
     }
 
     public function sendEmail() {

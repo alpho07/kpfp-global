@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>KPFP - Candidate Shortlisted</title>
+        <title>Welcome to KPFP</title>
         <style>
             body {
                 font-family: 'Segoe UI', sans-serif;
@@ -49,25 +49,36 @@
     </head>
     <body>
         <div class="container">
-            <div class="header" style='background: red;color:white;'>
-                <h2>Scholarship Application Status Update : REJECTED</h2>
+            <div class="header">
+                <h2>KPFP Scholarship Application Progress</h2>
             </div>
 
             <div class="content">
                 <p>Dear {{ $user }},</p>
 
-                <p>Your application to be enrolled to <strong>{{ $courseName }}</strong> course was vetted and  we regret to inform you that the application has been <b>REJECTED</b>                
-               
-                <p><b>Reason:</b> {{$query}}</p>
-              
-                <p>For further clarity, please reach out to the institution directly.</p>
+                <p>You have successfully uploaded the Pre-Auth Form and is received by the institution</p>
+
+                <p>Your application is currently under review. It will be vetted by the institution you selected during your application. You will receive communication from them once the vetting process is complete.</p>
+
+                <p><strong>Please ensure that you pay the required application fee (if applicable)</strong>. Applications without the fee may not be considered for vetting.</p>
+
+                <p>If you are selected, you will be contacted by the institution to:</p>
+                <ul>
+                    <li>Download the bonding form</li>
+                    <li>Fill it in <strong>triplicates</strong></li>
+                    <li>Upload the completed form together with the <strong>Release Form</strong></li>
+                </ul>
+
+                <p>Keep checking your email regularly for important updates and next steps.</p>
+
+                <p>We wish you all the best in your application process!</p>
 
                 <p>Warm regards,<br>
                     <strong>KPFP Admissions Team</strong></p>
             </div>
 
             <div class="footer">
-                 &copy; {{ date('Y') }} Kenya Paediatric Fellowship Program. All rights reserved.
+                &copy; {{ date('Y') }} Kenya Paediatric Fellowship Program. All rights reserved.
             </div>
         </div>
     </body>

@@ -27,6 +27,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class EnrollmentController extends Controller {
 
@@ -81,12 +82,85 @@ class EnrollmentController extends Controller {
 
             $user->assignRole('Student');
 
-            auth()->login($user);
+            $this->sendOtp($user);
+            session()->forget('is_submitting');
+            return redirect()->route('otp.verification', ['email' => $user->email])->with([
+                        'email' => $user->email,
+                        'success' => 'Great Progress ' . $user->name . ', Please check your email for Email verification code.'
+            ]);
+
+            //auth()->login($user);
         }
+
+
+
 
         //$course->enrollments()->create(['user_id' => auth()->user()->id]);
 
         return redirect()->route('enroll.myCourses');
+    }
+
+    public function sendOtp(User $user) {
+        // Generate a 6-digit OTP
+        $otp = mt_rand(100000, 999999);
+
+        // Set expiration time (1 hour from now)
+        $expiryTime = Carbon::now()->addHour();
+
+        // Update user record with OTP and expiration
+        $user->update([
+            'otp' => $otp,
+            'otp_expires_at' => $expiryTime,
+        ]);
+
+        // Send OTP via email
+        $zoho = app(ZohoMailService::class);
+        $result = $zoho->sendMailable($user->email, new \App\Mail\OtpMail($user, $otp));
+    }
+
+    public function verifyOtp(Request $request) {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'otp' => 'required|digits:6',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        // Validate OTP and expiration
+        if ($user->otp === $request->otp && Carbon::now()->lessThanOrEqualTo($user->otp_expires_at)) {
+            // Mark the user as verified
+            $user->update([
+                'is_verified' => 'true',
+                'otp' => null, // Clear OTP after verification
+                'otp_expires_at' => null,
+            ]);
+
+            auth()->login($user);
+
+            // $region = $this->checkUserCountry($user);
+            //session(['region' => $region]);
+
+            return redirect()->route('post.login')->with('success', 'Welcome back, ' . $user->name . '!');
+        }
+
+        return redirect()->route('otp.verification', ['email' => $user->email])->with('error', 'Invalid or expired OTP. Please enter a valid OTP.');
+    }
+
+    public function verify_otp() {
+
+        return view('enrollment.otp-verify');
+    }
+
+    public function postLogin() {
+        $user = auth()->user();
+        $institution = \App\Models\Institution::find(session('institution_id'));
+        $course = \App\Models\Course::find(session('course_id'));
+
+        if (is_null($institution)) {
+            return redirect()->route('home')->with('success', 'Welcome '.$user->first_name.', Your registration is successfull!');
+        } else {
+            return view('enrollment.confirmation', compact(['user', 'institution', 'course']));
+        }
     }
 
     public function handleLogin(Course $course) {
@@ -120,6 +194,8 @@ class EnrollmentController extends Controller {
     }
 
     public function apply($checklist_id = 0, Course $course, Request $r) {
+
+        //dd($course);
 
 
         $step = request('q');
@@ -247,10 +323,15 @@ class EnrollmentController extends Controller {
             ]);
         } elseif ($request->document_id == 15) {
 
+
             $scholarship->update([
                 'authorized_form' => $last_id,
                 'stage' => '50%'
             ]);
+            $zoho = app(ZohoMailService::class);
+            $result = $zoho->sendMailable($student->email, new \App\Mail\UploadPreAuthMail($student, $course));
+
+            return redirect()->route('enroll.myCourses')->with('success', $originalName . ' Uploaded Successfully. Please check email for next steps');
         } elseif ($request->document_id == 16) {
 
             $scholarship->update([
@@ -260,17 +341,17 @@ class EnrollmentController extends Controller {
             ]);
             // Mail::to($student->email)->send(new EnrollSuccessMail($student, $course));
             $zoho = app(ZohoMailService::class);
-            $result = $zoho->sendMailable($student->email,new  EnrollSuccessMail($student, $course));
+            $result = $zoho->sendMailable($student->email, new EnrollSuccessMail($student, $course));
             return redirect()->route('admin.home')->with('success', $originalName . ' Document uploaded successfully!');
         } elseif ($request->document_id == 17) {
 
             $scholarship->update([
                 'release_and_bonding_form' => $last_id
             ]);
-            //Mail::to($student->email)->send(new UploadRnBFMail($student, $course));
             $zoho = app(ZohoMailService::class);
-            $result = $zoho->sendMailable($student->email,new  UploadRnBFMail($student, $course));
-            return redirect()->route('admin.home')->with('success', $originalName . ' Release & Bonding uploaded successfully!');
+            $result = $zoho->sendMailable($student->email, new UploadRnBFMail($student, $course));
+
+            return redirect()->route('enroll.myCourses')->with('success', $originalName . ' Release & Bonding uploaded successfully!');
         }
 
 

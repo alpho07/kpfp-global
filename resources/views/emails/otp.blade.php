@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>KPFP - Candidate Shortlisted</title>
+        <title>Welcome to KPFP</title>
         <style>
             body {
                 font-family: 'Segoe UI', sans-serif;
@@ -49,25 +49,31 @@
     </head>
     <body>
         <div class="container">
-            <div class="header" style='background: red;color:white;'>
-                <h2>Scholarship Application Status Update : REJECTED</h2>
+            <div class="header" style='background:green; color:white;'>
+                <h2>Welcome to KPFP Scholarships Portal</h2>
             </div>
 
             <div class="content">
                 <p>Dear {{ $user }},</p>
 
-                <p>Your application to be enrolled to <strong>{{ $courseName }}</strong> course was vetted and  we regret to inform you that the application has been <b>REJECTED</b>                
-               
-                <p><b>Reason:</b> {{$query}}</p>
-              
-                <p>For further clarity, please reach out to the institution directly.</p>
+                <p>Thank you for registering at <strong>Kenya Paediatric Fellowship Program (KPFP) Scholarships Portal</strong>. </p>
+
+                <p>Welcome to acknowledge your application joining your fellow Applicants. Through the portal you have access to massive scholarships in various institutions that are fully provided you meet the scholarship needs</p>
+
+                <p>Before you proceed however, Your registration details needs to be verified. Please enter the <strong>Verification Code</strong> sent to you in this email</p>
+
+                <p>Your Verification Code is:<strong><h4>{{$otp}}</h4></strong></p>
+
+                <p>Keep checking your email regularly for important updates and next steps.</p>
+
+                <p>We wish you all the best in your application process!</p>
 
                 <p>Warm regards,<br>
                     <strong>KPFP Admissions Team</strong></p>
             </div>
 
             <div class="footer">
-                 &copy; {{ date('Y') }} Kenya Paediatric Fellowship Program. All rights reserved.
+                &copy; {{ date('Y') }} Kenya Paediatric Fellowship Program. All rights reserved.
             </div>
         </div>
     </body>
