@@ -3,7 +3,7 @@
 <div class="row justify-content-center" style="border-radius: 10px;">
     <div class="col-md-6">
         <div class="alert alert-info">
-            Dear Guest,<br>
+            Dear Applicant,<br>
             Welcome to Kenya Paediatric Fellowship Program (KPFP) Scholarships Portal. If you are new here, you will need to create an account to access all the features of the website.
             You can click <a href="{{route('enroll.create')}}">Here</a> or click the <b>"Create Account"</b> link just right of the "Login" button.<br>
             <p></p>

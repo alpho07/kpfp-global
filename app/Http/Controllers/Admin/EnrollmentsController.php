@@ -58,13 +58,13 @@ class EnrollmentsController extends Controller {
         $gender = $request->input('gender');
         $authorized_form = $request->input('authorized_form');
         $verification_status = $request->input('verification_status');
-        $short_listing_status = $request->input('short_listing_status');
+        $short_listing_status = $request->input('status');
         $stage = $request->input('stage');
         $payment_verified = $request->input('payment_verified');
         $course_id = $request->input('scholarship_id');
         $institution_id = $request->input('institution_id');
 
-        $searchFilters = ['start_date', 'end_date', 'county', 'scholarship_id', 'institution_id', 'town_city', 'affiliated_hospital', 'gender', 'authorized_form', 'verification_status', 'short_listing_status', 'stage', 'payment_verified'];
+        $searchFilters = ['start_date', 'end_date', 'county', 'scholarship_id', 'institution_id', 'town_city', 'affiliated_hospital', 'gender', 'authorized_form', 'verification_status', 'status', 'stage', 'payment_verified'];
 
         foreach ($searchFilters as $filter) {
             if ($request->filled($filter)) {

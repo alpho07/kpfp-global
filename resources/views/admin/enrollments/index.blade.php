@@ -87,7 +87,7 @@
                     @foreach (\App\Models\Course::all() as $course)
                     <option value="{{ $course->id }}"
                             {{ old('scholarship_id', request('scholarship_id')) == $course->id ? 'selected' : '' }}>
-                        {{ $course->name }}
+                        {{ $course->course_manager->name }}
                     </option>
                     @endforeach
                 </select>
@@ -261,11 +261,23 @@
 
             </div>
             <div class="col-md-2 mt-2">
-                <select class="form-control" name="short_listing_status">
-                    <option value="">-Short Listing Status-</option>
-                    <option value="Shortlisted"
-                            {{ old('short_listing_status', request('short_listing_status')) == 'Shortlisted' ? 'selected' : '' }}>
-                        Shortlisted</option>
+                <select class="form-control" name="status">
+                    <option value="">-Application Status-</option>
+                      <option value="Pending"
+                                    {{ old('status', request('status')) == 'Pending' ? 'selected' : '' }}>
+                                Pending</option>
+                            <option value="Approved"
+                                    {{ old('status', request('status')) == 'Approved' ? 'selected' : '' }}>
+                                Approved</option>
+                            <option value="Query"
+                                    {{ old('status', request('status')) == 'Query' ? 'selected' : '' }}>
+                                Query</option>
+                            <option value="Rejected"
+                                    {{ old('status', request('status')) == 'Rejected' ? 'selected' : '' }}>
+                                Rejected</option>
+                            <option value="Selected"
+                                    {{ old('status', request('status')) == 'Selected' ? 'selected' : '' }}>
+                                Selected</option>
                 </select>
 
             </div>
@@ -480,9 +492,9 @@
     </div>
 
     <div class="card-body">
-        <div class="alert alert-danger">
+<!--        <div class="alert alert-danger">
             Verify Payment by reviewing proof of payment under personal documents
-        </div>
+        </div>-->
         <div class="card-body">
             <!-- Add filter inputs for start and end date -->
 
@@ -551,10 +563,10 @@
 
                             <th>Processing Status</th>
 
-                            <th>
+<!--                            <th>
 
                                 Verification Status
-                            </th>
+                            </th>-->
                             <th>
 
                                 Sent Bonding Form
@@ -563,7 +575,7 @@
 
                                 Bonding & Release Form
                             </th>
-                            <th>
+<!--                            <th>
 
                                 Action
                             </th>
@@ -571,7 +583,7 @@
                             <th>
 
                                 Messaging / Reminder
-                            </th>
+                            </th>-->
                             <th>
 
                                 National ID
@@ -645,7 +657,7 @@
                     <div class="modal" id="queryModal{{ @$enrollment->application->id }}"
                          tabindex="-1" role="dialog">
                         <form
-                            action="{{ route('admin.application.update.status.form', [$enrollment->application->id]) }}"
+                            action="{{ route('admin.application.update.status.form', [@$enrollment->application->id]) }}"
                             method="post">
                             {{ @csrf_field() }}
                             <input type="hidden" name="status" value="Query">
@@ -818,9 +830,9 @@
                                 Selected</option>
                         </select>
                     </td>
-                    <td>
+<!--                    <td>
                         {{@$enrollment->application->verification_status }}
-                    </td>
+                    </td>-->
 
                     <td>
                         @if (@$enrollment->application->bonding_form == 'Not Sent')
@@ -839,7 +851,7 @@
                                  target="_blank">Download</a>
                         @endif
                     </td>
-                    <td>
+<!--                    <td>
                         @can('enrollment_show')
                         @if (@$enrollment->application->verification_status == 'Verified')
                         <a href="{{ route('admin.undo.verify', [$enrollment->scholarship_id, $enrollment->application_id]) }}"
@@ -894,7 +906,7 @@
                            href="{{ route('messaging.index', [auth()->user()->id, $enrollment->application_id]) }}">Open</a>
 
                         </a>
-                    </td>
+                    </td>-->
                     <td>
                         {{ @$enrollment->application->national_id_pass }}
                     </td>

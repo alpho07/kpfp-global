@@ -86,8 +86,8 @@
                     dateFormat: "yy-mm-dd", // Preferred date format
                     changeMonth: true, // Enable month dropdown
                     changeYear: true, // Enable year dropdown
-                    yearRange: "1920:2016", // Show years from 1920 to 2016
-                    defaultDate: new Date(2010, 0, 1)
+                    yearRange: "1920:"+new Date().getFullYear(), // Show years from 1920 to 2016
+                    defaultDate: new Date(new Date().getFullYear(), 0, 1)
 
                 });
 

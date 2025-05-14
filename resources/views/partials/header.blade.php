@@ -23,9 +23,9 @@
                             <li class="nav-item">
                                 <a style="color:white;" class="nav-link btn_4" href="{{ url('login') }}">Login</a>
                             </li>
-                            <li class="nav-item">
+<!--                            <li class="nav-item">
                                 <a class="nav-link btn_4" style="background:orange;color:white;" href="{{ url('enroll') }}">Register</a>
-                            </li>
+                            </li>-->
                             @endif
                             @auth
                                 <li class="nav-item">

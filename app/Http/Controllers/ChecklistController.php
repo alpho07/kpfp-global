@@ -23,7 +23,6 @@ use App\Traits\HandlesChecklist;
 use Illuminate\Support\Facades\Storage;
 use App\Services\ZohoMailService;
 
-
 class ChecklistController extends Controller {
 
     use HandlesChecklist;
@@ -246,11 +245,129 @@ class ChecklistController extends Controller {
         return redirect()->route('enroll.myCourses')->with('success', 'Application submitted successfully!,Please check your email for next steps');
     }
 
-    public function sendEmail() {
+    function autoSaveApplication(Checklist $checklist, Course $course, Request $request) {
 
+        $auth = auth()->user()->id;
+        $scholarship = $request->scholarship_id;
 
-        Mail::to($user->email)->send(new ApplicationSuccessMail($user, $course));
+        $application = AppApplications::updateOrCreate(
+                        [
+                            "checklist" => $checklist->id,
+                        ],
+                        [
+                            'application_id' => $auth,
+                            'scholarship_id' => $scholarship,
+                            "application_date" => $request->application_date,
+                            "first_name" => $request->first_name,
+                            "surname" => $request->surname,
+                            "preffered_name" => $request->preffered_name,
+                            "country" => $request->country,
+                            "county" => $request->county,
+                            "town_city" => $request->town_city,
+                            "affiliated_hospital" => $request->affiliated_hospital,
+                            "years_worked" => $request->years_worked,
+                            "preauth_inst_no_of_work_yrs" => $request->preauth_inst_no_of_work_yrs,
+                            "license_no" => $request->license_no,
+                            "registration_no" => $request->registration_no,
+                            "job_group" => $request->job_group,
+                            "Monthly_salary" => $request->Monthly_salary,
+                            "phone_no" => $request->phone_no,
+                            "email_" => $request->email_,
+                            "gender" => $request->gender,
+                            "national_id_pass" => $request->national_id_pass,
+                            "date_of_birth" => $request->date_of_birth,
+                            "age_years" => $request->age_years,
+                            "date_to_begin" => $request->date_to_begin,
+                            "speciality" => $request->speciality,
+                            "training_institution_with" => $request->training_institution_with,
+                            "funding_source" => $request->funding_source,
+                            "funding_source_yes_desc" => $request->funding_source_yes_desc,
+                            "emergency_first_name" => $request->emergency_first_name,
+                            "emergency_surname" => $request->emergency_surname,
+                            "emergency_title" => $request->emergency_title,
+                            "emergency_first_contact_no" => $request->emergency_first_contact_no,
+                            "emergency_secondcontact_no" => $request->emergency_secondcontact_no,
+                            "emergency_email" => $request->emergency_email,
+                            "emergency_relationship" => $request->emergency_relationship,
+                            "supervisor_title" => $request->supervisor_title,
+                            "supervisor_full_name" => $request->supervisor_full_name,
+                            "supervisor_designation" => $request->supervisor_designation,
+                            "supervisor_phone_no" => $request->supervisor_phone_no,
+                            "supervisor_email" => $request->supervisor_email,
+                            "supervisor_department" => $request->supervisor_department,
+                            "reference_previous_1" => $request->reference_previous_1,
+                            "reference_previous_2" => $request->reference_previous_2,
+                            "reference_previous_3" => $request->reference_previous_3,
+                        ]
+        );
 
-        return "Email sent successfully!";
+        AcademicHistory::where('checklist', $checklist->id)->delete();
+        for ($i = 0; $i < count($request->academic_university); $i++) :
+            AcademicHistory::Create(
+                    [
+                        "checklist" => $checklist->id,
+                        'application_id' => auth()->user()->id,
+                        'scholarship_id' => $request->scholarship_id,
+                        'academic_university' => $request->academic_university[$i],
+                        'academic_start_date' => $request->academic_start_date[$i],
+                        'academic_completion' => $request->academic_completion[$i],
+                        'academic_diplomas' => $request->academic_diplomas[$i],
+                    ]
+            );
+        endfor;
+
+        QualificationAttained::where('checklist', $checklist->id)->delete();
+        for ($i = 0; $i < count($request->training_institution); $i++) :
+            QualificationAttained::Create(
+                    [
+                        "checklist" => $checklist->id,
+                        'application_id' => auth()->user()->id,
+                        'scholarship_id' => $request->scholarship_id,
+                        'training_institution' => $request->training_institution[$i],
+                        'training_institution_start_date' => $request->training_institution_start_date[$i],
+                        'training_institution_completion' => $request->training_institution_completion[$i],
+                        'training_institution_attained' => $request->training_institution_attained[$i],
+                    ]
+            );
+        endfor;
+
+        ProfessionalReference::where('checklist', $checklist->id)->delete();
+        for ($i = 0; $i < count($request->reference_title); $i++) :
+            ProfessionalReference::Create(
+                    [
+                        "checklist" => $checklist->id,
+                        'application_id' => auth()->user()->id,
+                        'scholarship_id' => $request->scholarship_id,
+                        'reference_title' => $request->reference_title[$i],
+                        'reference_full_name' => $request->reference_full_name[$i],
+                        'reference_organization' => $request->reference_organization[$i],
+                        'reference_phone_no' => $request->reference_phone_no[$i],
+                        'reference_email' => $request->reference_email[$i],
+                        'reference_job_title' => $request->reference_job_title[$i],
+                    ]
+            );
+        endfor;
+
+        Employment::where('checklist', $checklist->id)->delete();
+        for ($i = 0; $i < count($request->previous_organization); $i++) :
+            Employment::Create(
+                    [
+                        "checklist" => $checklist->id,
+                        'application_id' => auth()->user()->id,
+                        'scholarship_id' => $request->scholarship_id,
+                        'previous_organization' => $request->previous_organization[$i],
+                        'previous_organization_from' => $request->previous_organization_from[$i],
+                        'reference_previous_organization_to' => $request->reference_previous_organization_to[$i],
+                        'reference_previous_job_title' => $request->reference_previous_job_title[$i],
+                        'reference_previous_supervisor' => $request->reference_previous_supervisor[$i],
+                        'reference_previous_responsibilities' => $request->reference_previous_responsibilities[$i],
+                        'reference_previous_phone_no' => $request->reference_previous_phone_no[$i],
+                    ]
+            );
+        endfor;
+
+        return response()->json([
+        'message' => 'Saved'
+        ]);
     }
 }

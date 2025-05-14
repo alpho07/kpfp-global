@@ -215,7 +215,7 @@
                             {{ @$enrollment->application->phone_no }}
                         </td>
 
-                        <td>
+                          <td>
 
 
 

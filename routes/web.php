@@ -78,6 +78,10 @@ Route::post('save.application/{checklist?}/{course?}', [ChecklistController::cla
         ->name('save.application')
         ->middleware('auth');
 
+Route::post('save.application.autosave/{checklist?}/{course?}', [ChecklistController::class, 'autoSaveApplication'])
+        ->name('save.application.autosave')
+        ->middleware('auth');
+
 Route::post('save.disclaimer/{checklist}/{course}', [ChecklistController::class, 'storeConsent'])
         ->name('save.disclaimer')
         ->middleware('auth');

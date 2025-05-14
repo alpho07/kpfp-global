@@ -499,7 +499,7 @@
                                                             value="{{  $application[0]->affiliated_hospital ?? '' }}"
                                                             required>
                                                         <br>
-                                                        Number of years worked in named institution: <input type="text"
+                                                        Number of years worked in named institution: <input type="number"
                                                             required
                                                             value="{{  $application[0]->years_worked ?? '' }}"
                                                             name="years_worked" id="years_worked" class="form-control">
@@ -526,7 +526,7 @@
                                                             name="job_group" id="job_group" class="form-control "
                                                             required>
                                                         <br>
-                                                        Current Gross Monthly Salary in KSH: <input type="text" required
+                                                        Current Gross Monthly Salary in KSH: <input type="number" required
                                                             value="{{  $application[0]->monthly_salary ?? '' }}"
                                                             name="Monthly_salary" id="Monthly_salary"
                                                             class="form-control">
@@ -628,7 +628,7 @@
                                                             {{ ($application[0]->funding_source ?? '') === 'No' ? 'checked' : '' }}
                                                             id="funding_source_no">
                                                         <br>
-                                                        <input type="text" name="funding_source_yes_desc"
+                                                        <input type="number" name="funding_source_yes_desc"
                                                             value="{{  $application[0]->funding_source_yes_desc ?? '' }}"
                                                             id="funding_source_yes_desc" class="form-control">
                                                     </td>
@@ -1052,14 +1052,14 @@
                                                             id="reference_organization1" class="form-control">
                                                     </td>
                                                     <td colspan="2">
-                                                        From: <input type="text" name="previous_organization_from[]"
+                                                        From: <input type="date" name="previous_organization_from[]"
                                                             required
                                                             value="{{ $employment[0]->previous_organization_from ?? '' }}"
-                                                            id="reference__phone_no_from1" class="form-control FROM">
-                                                        To: <input type="text"
+                                                            id="reference__phone_no_from1" class="form-control FROM1">
+                                                        To: <input type="date"
                                                             name="reference_previous_organization_to[]" required
                                                             value="{{  $employment[0]->reference_previous_organization_to ?? '' }}"
-                                                            id="reference__phone_no_to1" class="form-control TO">
+                                                            id="reference__phone_no_to1" class="form-control TO1">
                                                     </td>
 
                                                 </tr>
@@ -1394,6 +1394,34 @@
     <link href="//cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" rel="stylesheet">
     <script>
         $(document).ready(function() {
+            
+            
+               function autosaveForm() {
+        var form = $('#myForm');
+        var formData = new FormData(form[0]); // Create FormData object from form
+
+        $.ajax({
+            url: "{{route('save.application.autosave', [@$checklist[0]->id, @$course->id])}}", // Get the form's action URL
+            type: 'POST',
+            data: formData,
+            processData: false, // Prevent jQuery from processing the data
+            contentType: false, // Prevent jQuery from setting contentType
+            success: function(response) {
+                console.log('Form autosaved successfully:', response);
+                // Optionally show a success message to the user
+            },
+            error: function(xhr, status, error) {
+                console.error('Autosave failed:', error);
+                // Optionally show an error message to the user
+            }
+        });
+    }
+
+    // Trigger autosave every 30 seconds
+   setInterval(autosaveForm, 30000); // 30 seconds in milliseconds
+            
+            
+            
             $('#submitBtn').click(function(e) {
                 if ($('#ChecklistForm input[type="checkbox"]:checked').length === 0) {
                     e.preventDefault();
