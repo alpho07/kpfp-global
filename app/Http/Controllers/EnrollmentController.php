@@ -172,7 +172,7 @@ class EnrollmentController extends Controller {
         $breadcrumb = "MY SCHOLARSHIP APPLICATIONS";
         $user_id = auth()->user()->id;
         $checklist = $this->getChecklistHandler();
-        $enrollments = $checklist::where('application_id', $user_id)->with(['application', 'institution'])->get();
+        $enrollments = $checklist::where('application_id', $user_id)->with(['application', 'institution'])->orderBy('id','desc')->get();
 
         // return $enrollments;
 

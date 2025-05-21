@@ -156,6 +156,10 @@ Route::post('/verify-otp', [EnrollmentController::class,'verifyOtp'])->name('otp
 
 Route::get('/post-login', [EnrollmentController::class,'postLogin'])->name('post.login')->middleware('auth');
 
+Route::get('profile/{id}/edit', [EnrollmentController::class, 'uploadBondingForm'])
+        ->name('profile.edit')
+        ->middleware('auth');
+
 Route::group([
     'prefix' => 'admin',
     'as' => 'admin.',
@@ -250,6 +254,8 @@ Route::group([
                     ->name('enrollments.massDestroy');
             Route::resource('enrollments', AdminEnrollmentsController::class);
         });
+        
+        
 
 Route::get('/file/{dir1}/{$dir2}/{$dir3}/{$filename}', function ($dir1, $dir2, $dir3, $filename) {
     return Storage::download($dir1 . '/' . $dir2 . '/' . $dir3 . '/' . $filename);

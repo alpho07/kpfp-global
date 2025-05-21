@@ -3,7 +3,7 @@
         <div class="row justify-content-between">
             <div class="col-sm-6 col-md-2 col-xl-2">
                 <div class="single-footer-widget footer_1">
-                    <a href="index.html"> <img src="{{ asset('img/logo.png') }}" style="border-radius: 50%;" alt=""> </a>
+                    <a href="index.html"> <img src="{{ asset('img/KPFP.png') }}" style="border-radius: 50%;" alt=""> </a>
 
 
                    <p>&copy {{date('Y')}} Kenya Paediatric Association LTD.</p>

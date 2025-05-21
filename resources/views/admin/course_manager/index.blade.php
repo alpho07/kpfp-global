@@ -1,17 +1,17 @@
 @extends('layouts.admin')
 @section('content')
 @can('discipline_create')
-    <div style="margin-bottom: 10px;" class="row">
-        <div class="col-lg-12">
-            <a class="btn btn-success" href="{{ route("admin.course-manager.create") }}">
-                Create Course
-            </a>
-        </div>
+<div style="margin-bottom: 10px;" class="row">
+    <div class="col-lg-12">
+        <a class="btn btn-success" href="{{ route("admin.course-manager.create") }}">
+            Create Course
+        </a>
     </div>
+</div>
 @endcan
 <div class="card">
     <div class="card-header">
-       Course Manager
+        Course Manager
     </div>
 
     <div class="card-body">
@@ -32,8 +32,9 @@
                             Category
                         </th>
                         <th>
-                           Duration
+                            Duration
                         </th>
+                  
                         <th>
                             &nbsp;
                         </th>
@@ -41,46 +42,47 @@
                 </thead>
                 <tbody>
                     @foreach($disciplines as $key => $discipline)
-                        <tr data-entry-id="{{ $discipline->id }}">
-                            <td>
+                    <tr data-entry-id="{{ $discipline->id }}">
+                        <td>
 
-                            </td>
-                            <td>
-                                {{ $discipline->id ?? '' }}
-                            </td>
-                            <td>
-                                {{ $discipline->name ?? '' }}
-                            </td>
-                            <td>
-                                {{ $discipline->category->name ?? '' }}
-                            </td>
-                            <td>
-                                {{ $discipline->period->name ?? '' }}
-                            </td>
-                            <td>
-                                @can('discipline_show')
-                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.course-manager.show', $discipline->id) }}">
-                                        {{ trans('global.view') }}
-                                    </a>
-                                @endcan
+                        </td>
+                        <td>
+                            {{ $discipline->id ?? '' }}
+                        </td>
+                        <td>
+                            {{ $discipline->name ?? '' }}
+                        </td>
+                        <td>
+                            {{ $discipline->category->name ?? '' }}
+                        </td>
+                        <td>
+                            {{ $discipline->period->name ?? '' }}
+                        </td>
+                      
+                        <td>
+                            @can('discipline_show')
+                            <a class="btn btn-xs btn-primary" href="{{ route('admin.course-manager.show', $discipline->id) }}">
+                                {{ trans('global.view') }}
+                            </a>
+                            @endcan
 
-                                @can('discipline_edit')
-                                    <a class="btn btn-xs btn-info" href="{{ route('admin.course-manager.edit', $discipline->id) }}">
-                                        {{ trans('global.edit') }}
-                                    </a>
-                                @endcan
+                            @can('discipline_edit')
+                            <a class="btn btn-xs btn-info" href="{{ route('admin.course-manager.edit', $discipline->id) }}">
+                                {{ trans('global.edit') }}
+                            </a>
+                            @endcan
 
-                                @can('discipline_delete')
-                                    <form action="{{ route('admin.course-manager.destroy', $discipline->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
-                                    </form>
-                                @endcan
+                            @can('discipline_delete')
+                            <form action="{{ route('admin.course-manager.destroy', $discipline->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
+                            </form>
+                            @endcan
 
-                            </td>
+                        </td>
 
-                        </tr>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -94,47 +96,46 @@
 @parent
 <script>
     $(function () {
-  let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-@can('discipline_delete')
-  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
-  let deleteButton = {
-    text: deleteButtonTrans,
-    url: "{{ route('admin.disciplines.massDestroy') }}",
-    className: 'btn-danger',
-    action: function (e, dt, node, config) {
-      var ids = $.map(dt.rows({ selected: true }).nodes(), function (entry) {
-          return $(entry).data('entry-id')
-      });
+    let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+            @can('discipline_delete')
+            let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
+            let deleteButton = {
+            text: deleteButtonTrans,
+                    url: "{{ route('admin.disciplines.massDestroy') }}",
+                    className: 'btn-danger',
+                    action: function (e, dt, node, config) {
+                    var ids = $.map(dt.rows({ selected: true }).nodes(), function (entry) {
+                    return $(entry).data('entry-id')
+                    });
+                    if (ids.length === 0) {
+                    alert('{{ trans('global.datatables.zero_selected') }}')
 
-      if (ids.length === 0) {
-        alert('{{ trans('global.datatables.zero_selected') }}')
+                            return
+                    }
 
-        return
-      }
+                    if (confirm('{{ trans('global.areYouSure') }}')) {
+                    $.ajax({
+                    headers: {'x-csrf-token': _token},
+                            method: 'POST',
+                            url: config.url,
+                            data: { ids: ids, _method: 'DELETE' }})
+                            .done(function () { location.reload() })
+                    }
+                    }
+            }
+    dtButtons.push(deleteButton)
+            @endcan
 
-      if (confirm('{{ trans('global.areYouSure') }}')) {
-        $.ajax({
-          headers: {'x-csrf-token': _token},
-          method: 'POST',
-          url: config.url,
-          data: { ids: ids, _method: 'DELETE' }})
-          .done(function () { location.reload() })
-      }
-    }
-  }
-  dtButtons.push(deleteButton)
-@endcan
-
-  $.extend(true, $.fn.dataTable.defaults, {
-    order: [[ 1, 'desc' ]],
-    pageLength: 100,
-  });
-  $('.datatable-Discipline:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
-        $($.fn.dataTable.tables(true)).DataTable()
+            $.extend(true, $.fn.dataTable.defaults, {
+            order: [[ 1, 'desc' ]],
+                    pageLength: 100,
+            });
+    $('.datatable-Discipline:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
+    $($.fn.dataTable.tables(true)).DataTable()
             .columns.adjust();
     });
-})
+    })
 
 </script>
 @endsection

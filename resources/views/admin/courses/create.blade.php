@@ -50,6 +50,26 @@
                     {{ trans('cruds.course.fields.description_helper') }}
                 </p>
             </div>
+
+            {{-- Application Start Date --}}
+            <div class="form-group {{ $errors->has('application_start_date') ? 'has-error' : '' }}">
+                <label for="application_start_date">Application Start Date*</label>
+                <input type="date" id="application_start_date" name="application_start_date" class="form-control"
+                       value="{{ old('application_start_date') }}" required>
+                @if($errors->has('application_start_date'))
+                <em class="invalid-feedback">{{ $errors->first('application_start_date') }}</em>
+                @endif
+            </div>
+
+            {{-- Application End Date --}}
+            <div class="form-group {{ $errors->has('application_end_date') ? 'has-error' : '' }}">
+                <label for="application_end_date">Application End Date*</label>
+                <input type="date" id="application_end_date" name="application_end_date" class="form-control"
+                       value="{{ old('application_end_date') }}" required>
+                @if($errors->has('application_end_date'))
+                <em class="invalid-feedback">{{ $errors->first('application_end_date') }}</em>
+                @endif
+            </div>
             <!--div class="form-group {{ $errors->has('photo') ? 'has-error' : '' }}">
                 <label for="photo">{{ trans('cruds.course.fields.photo') }}</label>
                 <div class="needsclick dropzone" id="photo-dropzone">
