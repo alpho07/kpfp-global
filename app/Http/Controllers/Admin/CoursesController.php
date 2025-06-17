@@ -15,12 +15,11 @@ use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CoursesController extends Controller
-{
+class CoursesController extends Controller {
+
     use MediaUploadingTrait;
 
-    public function index()
-    {
+    public function index() {
         abort_if(Gate::denies('course_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $courses = Course::all();
@@ -29,8 +28,7 @@ class CoursesController extends Controller
         return view('admin.courses.index', compact('courses', 'inactiveCourses'));
     }
 
-    public function create()
-    {
+    public function create() {
         abort_if(Gate::denies('course_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $institutions = Institution::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
@@ -38,13 +36,22 @@ class CoursesController extends Controller
         $disciplines = Discipline::all()->pluck('name', 'id');
         $course_manager = CourseManager::all();
 
-        return view('admin.courses.create', compact('institutions', 'disciplines','course_manager'));
+        return view('admin.courses.create', compact('institutions', 'disciplines', 'course_manager'));
     }
 
-    public function store(StoreCourseRequest $request)
-    {
+    public function store(StoreCourseRequest $request) {
         $course = Course::create($request->all());
         $course->disciplines()->sync($request->input('disciplines', []));
+
+        $requirements = json_decode($request->input('requirements_json'), true);
+
+// Sample save logic
+        foreach ($requirements as $req) {
+            $course->requirements()->create([
+                'text' => $req['text'],
+                'mandatory' => $req['mandatory'],
+            ]);
+        }
 
         if ($request->input('photo', false)) {
             $course->addMedia(storage_path('tmp/uploads/' . $request->input('photo')))->toMediaCollection('photo');
@@ -53,32 +60,52 @@ class CoursesController extends Controller
         return redirect()->route('admin.courses.index');
     }
 
-    public function edit(Course $course)
-    {
+    public function edit(Course $course) {
         abort_if(Gate::denies('course_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $institutions = Institution::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $disciplines = Discipline::all()->pluck('name', 'id');
 
-        $course->load('institution', 'disciplines','course');
-        
+        $course->load('institution', 'disciplines', 'course');
+
         $course_manager = \App\Models\CourseManager::all();
 
-        return view('admin.courses.edit', compact('institutions', 'disciplines', 'course','course_manager'));
+        return view('admin.courses.edit', compact('institutions', 'disciplines', 'course', 'course_manager'));
     }
 
-    public function update(UpdateCourseRequest $request, Course $course)
-    {
-  
+    public function update(UpdateCourseRequest $request, Course $course) {
+        // Validate date logic
+        if (strtotime($request->application_end_date) < strtotime($request->application_start_date)) {
+            return back()->withErrors(['application_end_date' => 'The application end date must be after the start date.'])->withInput();
+        }
+
+        // Update course fields
         $course->update($request->all());
-        $course->disciplines()->sync($request->input('disciplines', []));   
 
-        return redirect()->route('admin.courses.index');
+        // Sync disciplines
+        $course->disciplines()->sync($request->input('disciplines', []));
+
+        // Update requirements
+        $course->requirements()->delete(); // Remove old ones
+        
+        //dd($request->requirements);
+
+        if ($request->has('requirements')) {
+            foreach ($request->input('requirements') as $requirement) {
+                if (!empty($requirement['text'])) {
+                    $course->requirements()->create([
+                        'text' => $requirement['text'],
+                        'mandatory' => $requirement['mandatory'],
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->route('admin.courses.index')->with('success', 'Course updated successfully.');
     }
 
-    public function show(Course $course)
-    {
+    public function show(Course $course) {
         abort_if(Gate::denies('course_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $course->load('institution', 'disciplines');
@@ -86,9 +113,7 @@ class CoursesController extends Controller
         return view('admin.courses.show', compact('course'));
     }
 
-
-    public function restore($id)
-    {
+    public function restore($id) {
         $course = Course::withTrashed()->find($id);
         if ($course) {
             $course->restore();
@@ -97,8 +122,7 @@ class CoursesController extends Controller
         return redirect()->route('admin.courses.index')->with('error', 'Scholarship not found!');
     }
 
-    public function destroy(Course $course)
-    {
+    public function destroy(Course $course) {
         abort_if(Gate::denies('course_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $course->delete();
@@ -106,8 +130,7 @@ class CoursesController extends Controller
         return back();
     }
 
-    public function massDestroy(MassDestroyCourseRequest $request)
-    {
+    public function massDestroy(MassDestroyCourseRequest $request) {
         Course::whereIn('id', request('ids'))->delete();
 
         return response(null, Response::HTTP_NO_CONTENT);

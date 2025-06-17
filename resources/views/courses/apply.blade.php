@@ -345,6 +345,12 @@
         }
     }
 
+    select,
+    input,
+    textarea {
+        text-transform: uppercase;
+    }
+
 </style>
 <section class=" section_padding_1" style="background: #E6E6E6; margin-top: 120px;">
     <div class="container">
@@ -446,7 +452,7 @@
                                                     </ul>
                                                 </td>
                                                 <td style="text-align: right;">
-                                                    <input type="checkbox" style="width: 20px;height:30px;"
+                                                    <input type="radio" style="width: 20px;height:30px;"
                                                            {{ ($checklist[0]->aof_govt ?? '') === 'on' ? 'checked' : '' }}
                                                     name="aof_govt" id="aof_govt" class="aof_govt" />
                                                 </td>
@@ -463,9 +469,9 @@
                                                     </ul>
                                                 </td>
                                                 <td style="text-align: right;">
-                                                    <input type="checkbox" style="width: 20px;height:30px;"
+                                                    <input type="radio" style="width: 20px;height:30px;"
                                                            {{  ($checklist[0]->aof_eac ?? '') === 'on' ? 'checked' : '' }}
-                                                    name="aof_ea" id="aof_ea" class="aof_ea" />
+                                                    name="aof_govt" id="aof_ea" class="aof_ea" />
                                                 </td>
                                             </tr>
                                             <tr>
@@ -567,7 +573,7 @@
                                             <td colspan="1">
                                                 {{ $i }}. {{ $document->file_name }} <br>
                                                 <small style="color:blue">
-                                                    ** Only pdf file allowed with max size of 2MB
+                                                    ** Only pdf file allowed with max size of 5MB
                                                 </small>
                                             </td>
                                             <td colspan="2">
@@ -689,17 +695,17 @@
                                             <td colspan="1">
                                                 First Name: <input type="text" name="first_name"
                                                                    id="first_name"
-                                                                   value="{{ $application[0]->first_name ?? auth()->user()->first_name }}"
+                                                                   value="{{ $application[0]->first_name ?? $applicant->first_name }}"
                                                                    class="nice-input" required>
                                             </td>
                                             <td colspan="1">
                                                 Surname: <input type="text" name="surname" id="surname"
-                                                                value="{{  $application[0]->surname ?? auth()->user()->last_name }}"
+                                                                value="{{  $application[0]->surname ?? $applicant->last_name }}"
                                                                 class="nice-input" required>
                                             </td>
                                             <td colspan="2">
-                                                Preffered Name: <input type="text" name="preffered_name"
-                                                                       value="{{ $application[0]->preffered_name ?? '' }}"
+                                                Preferred Name: <input type="text" name="preffered_name"
+                                                                       value="{{ $application[0]->preffered_name ?? $applicant->middle_name }}"
                                                                        id="preffered_name" class="nice-input" required>
                                             </td>
                                         </tr>
@@ -722,72 +728,70 @@
                                                 <p style="height: 100px">
                                                     &nbsp;
                                                 </p>
-                                                County: <select name="county" id="county"
-                                                                class="nice-select" required>
-                                                    <option
-                                                        value="{{ $application[0]->county ?? '' }}">
-                                                        {{  $application[0]->county ?? '-Select County-' }}
-                                                    </option>
-                                                    <option value="baringo">Baringo</option>
-                                                    <option value="bomet">Bomet</option>
-                                                    <option value="bungoma">Bungoma</option>
-                                                    <option value="busia">Busia</option>
-                                                    <option value="elgeyo marakwet">Elgeyo Marakwet</option>
-                                                    <option value="embu">Embu</option>
-                                                    <option value="garissa">Garissa</option>
-                                                    <option value="homa bay">Homa Bay</option>
-                                                    <option value="isiolo">Isiolo</option>
-                                                    <option value="kajiado">Kajiado</option>
-                                                    <option value="kakamega">Kakamega</option>
-                                                    <option value="kericho">Kericho</option>
-                                                    <option value="kiambu">Kiambu</option>
-                                                    <option value="kilifi">Kilifi</option>
-                                                    <option value="kirinyaga">Kirinyaga</option>
-                                                    <option value="kisii">Kisii</option>
-                                                    <option value="kisumu">Kisumu</option>
-                                                    <option value="kitui">Kitui</option>
-                                                    <option value="kwale">Kwale</option>
-                                                    <option value="laikipia">Laikipia</option>
-                                                    <option value="lamu">Lamu</option>
-                                                    <option value="machakos">Machakos</option>
-                                                    <option value="makueni">Makueni</option>
-                                                    <option value="mandera">Mandera</option>
-                                                    <option value="meru">Meru</option>
-                                                    <option value="migori">Migori</option>
-                                                    <option value="marsabit">Marsabit</option>
-                                                    <option value="mombasa">Mombasa</option>
-                                                    <option value="muranga">Muranga</option>
-                                                    <option value="nairobi">Nairobi</option>
-                                                    <option value="nakuru">Nakuru</option>
-                                                    <option value="nandi">Nandi</option>
-                                                    <option value="narok">Narok</option>
-                                                    <option value="nyamira">Nyamira</option>
-                                                    <option value="nyandarua">Nyandarua</option>
-                                                    <option value="nyeri">Nyeri</option>
-                                                    <option value="samburu">Samburu</option>
-                                                    <option value="siaya">Siaya</option>
-                                                    <option value="taita taveta">Taita Taveta</option>
-                                                    <option value="tana river">Tana River</option>
-                                                    <option value="tharaka nithi">Tharaka Nithi</option>
-                                                    <option value="trans nzoia">Trans Nzoia</option>
-                                                    <option value="turkana">Turkana</option>
-                                                    <option value="uasin gishu">Uasin Gishu</option>
-                                                    <option value="vihiga">Vihiga</option>
-                                                    <option value="wajir">Wajir</option>
-                                                    <option value="pokot">West Pokot</option>
+                                                County of work: <select name="county" id="county"
+                                                                        class="nice-select" required>
+
+                                                    <option value="baringo" {{ $applicant->county == 'baringo' ? 'selected' : '' }}>Baringo</option>
+                                                    <option value="bomet" {{ $applicant->county == 'bomet' ? 'selected' : '' }}>Bomet</option>
+                                                    <option value="bungoma" {{ $applicant->county == 'bungoma' ? 'selected' : '' }}>Bungoma</option>
+                                                    <option value="busia" {{ $applicant->county == 'busia' ? 'selected' : '' }}>Busia</option>
+                                                    <option value="elgeyo marakwet" {{ $applicant->county == 'elgeyo marakwet' ? 'selected' : '' }}>Elgeyo Marakwet</option>
+                                                    <option value="embu" {{ $applicant->county == 'embu' ? 'selected' : '' }}>Embu</option>
+                                                    <option value="garissa" {{ $applicant->county == 'garissa' ? 'selected' : '' }}>Garissa</option>
+                                                    <option value="homa bay" {{ $applicant->county == 'homa bay' ? 'selected' : '' }}>Homa Bay</option>
+                                                    <option value="isiolo" {{ $applicant->county == 'isiolo' ? 'selected' : '' }}>Isiolo</option>
+                                                    <option value="kajiado" {{ $applicant->county == 'kajiado' ? 'selected' : '' }}>Kajiado</option>
+                                                    <option value="kakamega" {{ $applicant->county == 'kakamega' ? 'selected' : '' }}>Kakamega</option>
+                                                    <option value="kericho" {{ $applicant->county == 'kericho' ? 'selected' : '' }}>Kericho</option>
+                                                    <option value="kiambu" {{ $applicant->county == 'kiambu' ? 'selected' : '' }}>Kiambu</option>
+                                                    <option value="kilifi" {{ $applicant->county == 'kilifi' ? 'selected' : '' }}>Kilifi</option>
+                                                    <option value="kirinyaga" {{ $applicant->county == 'kirinyaga' ? 'selected' : '' }}>Kirinyaga</option>
+                                                    <option value="kisii" {{ $applicant->county == 'kisii' ? 'selected' : '' }}>Kisii</option>
+                                                    <option value="kisumu" {{ $applicant->county == 'kisumu' ? 'selected' : '' }}>Kisumu</option>
+                                                    <option value="kitui" {{ $applicant->county == 'kitui' ? 'selected' : '' }}>Kitui</option>
+                                                    <option value="kwale" {{ $applicant->county == 'kwale' ? 'selected' : '' }}>Kwale</option>
+                                                    <option value="laikipia" {{ $applicant->county == 'laikipia' ? 'selected' : '' }}>Laikipia</option>
+                                                    <option value="lamu" {{ $applicant->county == 'lamu' ? 'selected' : '' }}>Lamu</option>
+                                                    <option value="machakos" {{ $applicant->county == 'machakos' ? 'selected' : '' }}>Machakos</option>
+                                                    <option value="makueni" {{ $applicant->county == 'makueni' ? 'selected' : '' }}>Makueni</option>
+                                                    <option value="mandera" {{ $applicant->county == 'mandera' ? 'selected' : '' }}>Mandera</option>
+                                                    <option value="meru" {{ $applicant->county == 'meru' ? 'selected' : '' }}>Meru</option>
+                                                    <option value="migori" {{ $applicant->county == 'migori' ? 'selected' : '' }}>Migori</option>
+                                                    <option value="marsabit" {{ $applicant->county == 'marsabit' ? 'selected' : '' }}>Marsabit</option>
+                                                    <option value="mombasa" {{ $applicant->county == 'mombasa' ? 'selected' : '' }}>Mombasa</option>
+                                                    <option value="muranga" {{ $applicant->county == 'muranga' ? 'selected' : '' }}>Murang'a</option>
+                                                    <option value="nairobi" {{ $applicant->county == 'nairobi' ? 'selected' : '' }}>Nairobi</option>
+                                                    <option value="nakuru" {{ $applicant->county == 'nakuru' ? 'selected' : '' }}>Nakuru</option>
+                                                    <option value="nandi" {{ $applicant->county == 'nandi' ? 'selected' : '' }}>Nandi</option>
+                                                    <option value="narok" {{ $applicant->county == 'narok' ? 'selected' : '' }}>Narok</option>
+                                                    <option value="nyamira" {{ $applicant->county == 'nyamira' ? 'selected' : '' }}>Nyamira</option>
+                                                    <option value="nyandarua" {{ $applicant->county == 'nyandarua' ? 'selected' : '' }}>Nyandarua</option>
+                                                    <option value="nyeri" {{ $applicant->county == 'nyeri' ? 'selected' : '' }}>Nyeri</option>
+                                                    <option value="samburu" {{ $applicant->county == 'samburu' ? 'selected' : '' }}>Samburu</option>
+                                                    <option value="siaya" {{ $applicant->county == 'siaya' ? 'selected' : '' }}>Siaya</option>
+                                                    <option value="taita taveta" {{ $applicant->county == 'taita taveta' ? 'selected' : '' }}>Taita Taveta</option>
+                                                    <option value="tana river" {{ $applicant->county == 'tana river' ? 'selected' : '' }}>Tana River</option>
+                                                    <option value="tharaka nithi" {{ $applicant->county == 'tharaka nithi' ? 'selected' : '' }}>Tharaka Nithi</option>
+                                                    <option value="trans nzoia" {{ $applicant->county == 'trans nzoia' ? 'selected' : '' }}>Trans Nzoia</option>
+                                                    <option value="turkana" {{ $applicant->county == 'turkana' ? 'selected' : '' }}>Turkana</option>
+                                                    <option value="uasin gishu" {{ $applicant->county == 'uasin gishu' ? 'selected' : '' }}>Uasin Gishu</option>
+                                                    <option value="vihiga" {{ $applicant->county == 'vihiga' ? 'selected' : '' }}>Vihiga</option>
+                                                    <option value="wajir" {{ $applicant->county == 'wajir' ? 'selected' : '' }}>Wajir</option>
+                                                    <option value="pokot" {{ $applicant->county == 'pokot' ? 'selected' : '' }}>West Pokot</option>
+
                                                 </select>
                                             </td>
                                             <td colspan="1">
                                                 Town/City: <br>
-                                                <textarea id="town_city" name="town_city" class="styled-textarea" required>
-                                                        {{ $application[0]->town_city ?? '' }}
-                                                </textarea>
+                                                <input id="town_city" name="town_city"  required  class="nice-input"
+                                                       value="{{ $application[0]->town_city ?? $applicant->county }}">
+
                                             </td>
                                             <td colspan="2">
                                                 Affiliated Hospital/Institution: <input type="text"
                                                                                         name="affiliated_hospital" id="affiliated_hospital"
                                                                                         class="nice-input"
-                                                                                        value="{{  $application[0]->affiliated_hospital ?? '' }}"
+                                                                                        value="{{  $application[0]->affiliated_hospital ?? $course->institution->name }}"
                                                                                         required>
                                                 <br>
                                                 Number of years worked in named institution: <input type="number"
@@ -828,7 +832,7 @@
                                             <td colspan="1">
                                                 Phone No.: <input type="text" name="phone_no" id="phone_no"
                                                                   required
-                                                                  value="{{  $application[0]->phone_no ?? '' }}"
+                                                                  value="{{  $application[0]->phone_no ?? $applicant->phone }}"
                                                                   class="nice-input">
                                             </td>
                                             <td colspan="3">
@@ -844,47 +848,47 @@
                                             <td colspan="1">
                                                 Sex: Male <input type="radio" value="male" name="gender"
                                                                  required
-                                                                 {{ ($application[0]->gender ?? '') === 'male' ? 'checked' : '' }}
+                                                                 {{ ($application[0]->gender ?? $applicant->gender ) === 'Male' ? 'checked' : '' }}
                                                 id="first_name">
                                                 Female
                                                 <input type="radio" value="female" name="gender"
                                                        id="gender" required
-                                                       {{ ($application[0]->gender ?? '') == 'female' ? 'checked' : '' }}>
+                                                       {{ ($application[0]->gender ?? $applicant->gender ) == 'Female' ? 'checked' : '' }}>
                                             </td>
                                             <td colspan="1">
                                                 National ID/Passport: <input type="text"
                                                                              name="national_id_pass" required
-                                                                             value="{{ $application[0]->national_id_pass ?? '' }}"
+                                                                             value="{{ $application[0]->national_id_pass ?? $applicant->id_number  }}"
                                                                              id="national_id_pass" class="nice-input">
                                             </td>
                                             <td colspan="1">
                                                 Date of Birth <input type="text" name="date_of_birth" required
-                                                                     value="{{ $application[0]->date_of_birth ?? '' }}"
+                                                                     value="{{ $application[0]->date_of_birth ?? $applicant->dob  }}"
                                                                      id="DATE_OF_BIRTH" class="nice-input datepicker-11">
                                             </td>
                                             <td colspan="1">
                                                 Age(Years): <input type="text" name="age_years" id="age_years"
                                                                    readonly required
-                                                                   value="{{  $application[0]->age_years ?? '' }}"
+                                                                   value="{{  $application[0]->age_years ?? $applicant->age }}"
                                                                    class="nice-input">
                                             </td>
                                         </tr>
                                         <tr>
                                             <td colspan="1">
-                                                Date available to begin training: <input type="text"
-                                                                                         type="text" required
+                                                Date available to begin training: <input type="text" readonly
+                                                                                          required
                                                                                          value="{{  $application[0]->date_to_begin ?? '' }}"
-                                                                                         name="date_to_begin" id="date_to_begin"
-                                                                                         class="nice-input datepicker-12">
+                                                                                         name="date_to_begin" id="TRAINING_DATE"
+                                                                                         class="nice-input">
                                             </td>
                                             <td colspan="3">
-                                                Specialty or Sub-speciality applied for: <input type="text"
+                                                Specialty or Sub-speciality applied for: <input type="text" readonly
                                                                                                 required
-                                                                                                value="{{  $application[0]->speciality ?? '' }}"
+                                                                                                value="{{  $application[0]->speciality ?? $course->course_manager->name }}"
                                                                                                 name="speciality" id="speciality" class="nice-input"> <br>
-                                                Indicate Training Institution applied with: <input type="text"
+                                                Indicate Training Institution applied with: <input type="text" readonly
                                                                                                    required
-                                                                                                   value="{{ $application[0]->training_institution_with ?? '' }}"
+                                                                                                   value="{{ $application[0]->training_institution_with ?? $course->institution->name }}"
                                                                                                    name="training_institution_with"
                                                                                                    id="training_institution_with" class="nice-input">
                                             </td>
@@ -1384,13 +1388,13 @@
                                             <td>
                                                 Yes <input type="radio" value="yes"
                                                            name="reference_previous_1"
-                                                           {{  ($application[0]->reference_previous_1 ?? '') === 'yes' ? 'checked' : '' }}
+                                                           {{  ($application[0]->reference_previous_1 ?? 'yes') === 'yes' ? 'checked' : '' }}
                                                 id="reference_previous_yes">
                                             </td>
                                             <td>
-                                                No <input type="radio" value="no"
-                                                          name="reference_previous_1"
-                                                          {{  ($application[0]->reference_previous_1 ?? '') === 'no' ? 'checked' : '' }}
+                                                 <input type="radio" value="no" style="display:none"
+                                                          name="reference_previous_111"
+                                                          {{  ($application[0]->reference_previous_111 ?? '') === 'no' ? 'checked' : '' }}
                                                 id="reference_previous_no">
                                             </td>
                                             <td>
@@ -1448,13 +1452,13 @@
                                             <td>
                                                 Yes <input type="radio" value="yes"
                                                            name="reference_previous_2"
-                                                           {{  ($application[0]->reference_previous_2 ?? '') === 'yes' ? 'checked' : '' }}
+                                                           {{  ($application[0]->reference_previous_2 ?? 'yes') === 'yes' ? 'checked' : '' }}
                                                 id="reference_previous_yes">
                                             </td>
                                             <td>
-                                                No <input type="radio" value="no"
-                                                          name="reference_previous_2"
-                                                          {{ ($application[0]->reference_previous_2 ?? '') === 'no' ? 'checked' : '' }}
+                                                 <input type="radio" value="no" style="display:none"
+                                                          name="reference_previous_222"
+                                                          {{ ($application[0]->reference_previous_222 ?? '') === 'no' ? 'checked' : '' }}
                                                 id="reference_previous_no">
                                             </td>
                                             <td>
@@ -1512,13 +1516,13 @@
                                             <td>
                                                 Yes <input type="radio" value="yes"
                                                            name="reference_previous_3"
-                                                           {{  ($application[0]->reference_previous_3 ?? '') === 'yes' ? 'checked' : '' }}
+                                                           {{  ($application[0]->reference_previous_3 ?? 'yes') === 'yes' ? 'checked' : '' }}
                                                 id="reference_previous_yes">
                                             </td>
                                             <td>
-                                                No <input type="radio" value="no"
-                                                          name="reference_previous_3"
-                                                          {{  ($application[0]->reference_previous_3 ?? '') === 'no' ? 'checked' : '' }}
+                                                 <input type="radio" value="no" style="display:none"
+                                                          name="reference_previous_333"
+                                                          {{  ($application[0]->reference_previous_333 ?? '') === 'no' ? 'checked' : '' }}
                                                 id="reference_previous_no">
                                             </td>
                                             <td>
@@ -1587,7 +1591,7 @@
 
                                                 Agree <input type="radio" value="Agree" name="disclaimer_1"
                                                              required
-                                                             {{  ($disclaimer[0]->disclaimer_1 ?? '') === 'Agree' ? 'checked' : '' }}
+                                                             {{  ($disclaimer[0]->disclaimer_1 ?? 'Agree') === 'Agree' ? 'checked' : '' }}
                                                 id="disclaimer_1_agree"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 Disagree <input type="radio" value="Disagree"
                                                                 name="disclaimer_1" required
@@ -1609,7 +1613,7 @@
                                             <td>
                                                 Agree <input type="radio" value="Agree" name="disclaimer_2"
                                                              required
-                                                             {{ ($disclaimer[0]->disclaimer_2 ?? '') === 'Agree' ? 'checked' : '' }}
+                                                             {{ ($disclaimer[0]->disclaimer_2 ?? 'Agree') === 'Agree' ? 'checked' : '' }}
                                                 id="disclaimer_2_agree"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 Disagree <input type="radio" value="Disagree"
                                                                 name="disclaimer_2" required
@@ -1687,6 +1691,14 @@
 
 
 <script>
+  document.getElementById('years_worked').addEventListener('input', function (e) {
+      this.value = this.value.replace(/[^0-9]/g, '');
+  });
+
+  document.getElementById('Monthly_salary').addEventListener('input', function (e) {
+      this.value = this.value.replace(/[^0-9]/g, '');
+  });
+
   $(document).ready(function () {
 
 
@@ -1722,7 +1734,7 @@
       }
 
       // Trigger autosave every 30 seconds
-      setInterval(autosaveForm, 30000); // 30 seconds in milliseconds
+      // setInterval(autosaveForm, 30000); // 30 seconds in milliseconds
 
 
 
@@ -1757,6 +1769,8 @@
           $('#ChecklistForm').submit();
       });
   });
+  
+
 </script>
 
 @endsection

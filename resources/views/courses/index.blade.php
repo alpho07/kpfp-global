@@ -58,13 +58,13 @@
             <h4 class="mb-3">🎯 Active Scholarships</h4>
             <div class="row g-3">
                 @forelse ($courses->where('status', 'Active') as $course)
-                    <div class="col-md-6 col-lg-4">
+                    <div class="col-md-6 col-lg-4 mt-3">
                         <a href="{{ route('courses.show', $course->id) }}" class="text-decoration-none">
                             <div class="scholarship-card status-active">
                                 <h5 style="color:white">{{ $course->course->name }}</h5>
                                 <h6 style="color:white">{{ $course->course->category->name }}</h6>
                                 <span class="badge bg-light text-dark">
-                                    {{ $course->days_left }} left | Deadline: {{ \Carbon\Carbon::parse($course->application_end_date)->format('D, M j, Y') }}
+                                    {{ $course->days_left }}  | Deadline: {{ \Carbon\Carbon::parse($course->application_end_date)->format('D, M j, Y') }}
                                 </span>
                             </div>
                         </a>
@@ -84,7 +84,7 @@
                     <div class="scholarship-card status-upcoming mb-3">
                         <h5 style="color:white">{{ $course->course->name }}</h5>
                         <h6 style="color:white">{{ $course->course->category->name }}</h6>
-                        <span class="badge bg-light text-dark">{{ $course->days_left }} days left</span>
+                        <span class="badge bg-light text-dark">{{ $course->days_left }}</span>
                     </div>
                 @empty
                     <p>No upcoming scholarships.</p>

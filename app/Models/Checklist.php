@@ -30,6 +30,10 @@ class Checklist extends BaseModel {
         'institution_id'
     ];
 
+    public function applicant(): BelongsTo {
+        return $this->belongsTo(User::class,'application_id');
+    }
+
     public function application(): HasOne {
         return $this->hasOne(Applications::class, 'checklist', 'id');
     }

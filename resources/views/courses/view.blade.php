@@ -60,6 +60,13 @@
     .writing_area {
         background-color: #E7E6E6;
     }
+
+    select,
+    input,
+    textarea {
+        text-transform: uppercase;
+    }
+
 </style>
 <section class=" section_padding" >
     <div class="container">
@@ -71,20 +78,20 @@
                         <thead>
                             <tr >
                                 <td colspan="4">
-                                    <center> @include('partials.toplogo') </center>
-                                </td>
-                            </tr>
-                            <tr>
-                                <p style="height: 10px">&nbsp;</p>
-                            </tr>
-                            <tr>
-                                <th colspan="4">
-                                    <center>
-                                        <p style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-size:20px; font-weight:bold;">KENYA PAEDIATRIC FELLOWSHIP PROGRAM (KPFP) <br>SPONSORSHIP APPLICATION
-                                        FORM</p>
-                                    </center>
-                                </th>
-                            </tr>
+                        <center> @include('partials.toplogo') </center>
+                        </td>
+                        </tr>
+                        <tr>
+                        <p style="height: 10px">&nbsp;</p>
+                        </tr>
+                        <tr>
+                            <th colspan="4">
+                        <center>
+                            <p style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-size:20px; font-weight:bold;">KENYA PAEDIATRIC FELLOWSHIP PROGRAM (KPFP) <br>SPONSORSHIP APPLICATION
+                                FORM</p>
+                        </center>
+                        </th>
+                        </tr>
                         </thead>
                         <tbody>
                             <tr>
@@ -115,8 +122,8 @@
                                 </td>
                                 <td style="text-align: right; ">
                                     <input type="checkbox" style="height:20px; width:20px;"
-                                        {{ isset($checklist[0]) && $checklist[0]->aof_govt == 'on' ? 'checked' : '' }}
-                                        name="aof_govt" id="aof_govt" class="aof_govt" />
+                                           {{ isset($checklist[0]) && $checklist[0]->aof_govt == 'on' ? 'checked' : '' }}
+                                    name="aof_govt" id="aof_govt" class="aof_govt" />
                                 </td>
                             </tr>
                             <tr>
@@ -132,8 +139,8 @@
                                 </td>
                                 <td style="text-align: right">
                                     <input type="checkbox"  style="height:20px; width:20px;"
-                                        {{ isset($checklist[0]) && $checklist[0]->aof_ea == 'on' ? 'checked' : '' }}
-                                        name="aof_ea" id="aof_ea" class="aof_ea" />
+                                           {{ isset($checklist[0]) && $checklist[0]->aof_ea == 'on' ? 'checked' : '' }}
+                                    name="aof_ea" id="aof_ea" class="aof_ea" />
                                 </td>
                             </tr>
                             <tr>
@@ -142,8 +149,8 @@
                                 </td>
                                 <td style="text-align: right">
                                     <input type="checkbox"  style="height:20px; width:20px;"
-                                        {{ isset($checklist[0]) && $checklist[0]->commitment == 'on' ? 'checked' : '' }}
-                                        name="commitment" id="commitment" class="commitment" />
+                                           {{ isset($checklist[0]) && $checklist[0]->commitment == 'on' ? 'checked' : '' }}
+                                    name="commitment" id="commitment" class="commitment" />
                                 </td>
                             </tr>
                             <tr>
@@ -153,8 +160,8 @@
                                 </td>
                                 <td style="text-align: right">
                                     <input type="checkbox"  style="height:20px; width:20px;"
-                                        {{ isset($checklist[0]) && $checklist[0]->not_beneficiary == 'on' ? 'checked' : '' }}
-                                        name="not_beneficiary" id="not_beneficiary" class="not_beneficiary" />
+                                           {{ isset($checklist[0]) && $checklist[0]->not_beneficiary == 'on' ? 'checked' : '' }}
+                                    name="not_beneficiary" id="not_beneficiary" class="not_beneficiary" />
                                 </td>
                             </tr>
                             <tr>
@@ -181,10 +188,10 @@
                                 <td colspan="2">
                                     2. Personal statement/reflective thinking summary about your passion
                                     for the course and desired impact post-training </td>
-                                    <td></td>
+                                <td></td>
                                 <td style="text-align: right">
-                                       <input type="checkbox"  style="height:20px; width:20px;"
-                                              {{ isset($uploaded_documents[0]) && $uploaded_documents[0]->document_id==1 ? 'checked' : '' }}/>
+                                    <input type="checkbox"  style="height:20px; width:20px;"
+                                           {{ isset($uploaded_documents[0]) && $uploaded_documents[0]->document_id==1 ? 'checked' : '' }}/>
 
 
                                 </td>
@@ -197,7 +204,7 @@
                                 </td>
                                 <td style="text-align: right">
                                     <input type="checkbox"  style="height:20px; width:20px;"
-                                        {{ isset($uploaded_documents[1]) && $uploaded_documents[1]->document_id==2 ? 'checked' : '' }} />
+                                           {{ isset($uploaded_documents[1]) && $uploaded_documents[1]->document_id==2 ? 'checked' : '' }} />
 
                                 </td>
                             </tr>
@@ -209,7 +216,7 @@
                                 </td>
                                 <td style="text-align: right">
                                     <input type="checkbox"  style="height:20px; width:20px;"
-                                        {{ isset($uploaded_documents[2]) && $uploaded_documents[2]->document_id==3 ? 'checked' : '' }} />
+                                           {{ isset($uploaded_documents[2]) && $uploaded_documents[2]->document_id==3 ? 'checked' : '' }} />
 
                                 </td>
                             </tr>
@@ -220,7 +227,7 @@
                                 </td>
                                 <td style="text-align: right">
                                     <input type="checkbox"  style="height:20px; width:20px;"
-                                        {{ isset($uploaded_documents[3]) && $uploaded_documents[3]->document_id==4 ? 'checked' : '' }} />
+                                           {{ isset($uploaded_documents[3]) && $uploaded_documents[3]->document_id==4 ? 'checked' : '' }} />
 
                                 </td>
                             </tr>
@@ -282,18 +289,18 @@
                                 </td>
                                 <td colspan="2">
                                     <p>Affiliated Hospital/Institution:
-                                    <u>{{ isset($application[0]) ? $application[0]->affiliated_hospital : '' }}</u></p>
+                                        <u>{{ isset($application[0]) ? $application[0]->affiliated_hospital : '' }}</u></p>
 
                                     <p>Number of years worked in named institution:
-                                    <u>{{ isset($application[0]) ? $application[0]->years_worked : '' }}</u></p>
+                                        <u>{{ isset($application[0]) ? $application[0]->years_worked : '' }}</u></p>
                                     <p>For Paediatricians, also indicate number of years worked with the
-                                    preauthorizing institution post specialization
-                                    Current Area/Department of Work:
-                                    <u>{{ isset($application[0]) ? $application[0]->preauth_inst_no_of_work_yrs : '' }}</u></p>
+                                        preauthorizing institution post specialization
+                                        Current Area/Department of Work:
+                                        <u>{{ isset($application[0]) ? $application[0]->preauth_inst_no_of_work_yrs : '' }}</u></p>
 
 
                                     <p>Employment/Licence No:
-                                    <u>{{ isset($application[0]) ? $application[0]->license_no : '' }}</u></p>
+                                        <u>{{ isset($application[0]) ? $application[0]->license_no : '' }}</u></p>
 
                                     <p> Country regulatory body registration No:
                                         <u>{{ isset($application[0]) ? $application[0]->registration_no : '' }}</u></p>
@@ -319,11 +326,11 @@
                             <tr>
                                 <td colspan="1">
                                     Sex: Male <input type="checkbox" value="male" name="gender"
-                                        {{ isset($application[0]) && $application[0]->gender == 'male' ? 'checked' : '' }}
-                                        id="first_name">
+                                                     {{ isset($application[0]) && $application[0]->gender == 'male' ? 'checked' : '' }}
+                                    id="first_name">
                                     Female
                                     <input type="checkbox" value="female" name="gender" id="gender"
-                                        {{ isset($application[0]) && $application[0]->gender == 'female' ? 'checked' : '' }} />
+                                           {{ isset($application[0]) && $application[0]->gender == 'female' ? 'checked' : '' }} />
                                 </td>
                                 <td colspan="1">
                                     National ID/Passport:
@@ -366,11 +373,11 @@
                                 </td>
                                 <td colspan="3">
                                     Yes <input type="checkbox" value="Yes" name="funding_source"
-                                        {{ isset($application[0]) && $application[0]->funding_source == 'Yes' ? 'checked' : '' }}
-                                        id="funding_source_yes"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                               {{ isset($application[0]) && $application[0]->funding_source == 'Yes' ? 'checked' : '' }}
+                                    id="funding_source_yes"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     No <input type="checkbox" value="No" name="funding_source"
-                                        {{ isset($application[0]) && $application[0]->funding_source == 'No' ? 'checked' : '' }}
-                                        id="funding_source_no">
+                                              {{ isset($application[0]) && $application[0]->funding_source == 'No' ? 'checked' : '' }}
+                                    id="funding_source_no">
                                     <br>
                                     {{ isset($application[0]) ? $application[0]->funding_source_yes_desc : '' }}
                                 </td>
@@ -699,13 +706,13 @@
                                 </td>
                                 <td>
                                     Yes <input type="checkbox" value="yes" name="reference_previous_1"
-                                        {{ isset($application[0]) && $application[0]->reference_previous_1 == 'yes' ? 'checked' : '' }}
-                                        id="reference_previous_yes">
+                                               {{ isset($application[0]) && $application[0]->reference_previous_1 == 'yes' ? 'checked' : '' }}
+                                    id="reference_previous_yes">
                                 </td>
                                 <td>
                                     No <input type="checkbox" value="no" name="reference_previous_1"
-                                        {{ isset($application[0]) && $application[0]->reference_previous_1 == 'no' ? 'checked' : '' }}
-                                        id="reference_previous_no">
+                                              {{ isset($application[0]) && $application[0]->reference_previous_1 == 'no' ? 'checked' : '' }}
+                                    id="reference_previous_no">
                                 </td>
                                 <td>
                                     Phone No#
@@ -748,13 +755,13 @@
                                 </td>
                                 <td>
                                     Yes <input type="checkbox" value="yes" name="reference_previous_2"
-                                        {{ isset($application[0]) && $application[0]->reference_previous_2 == 'yes' ? 'checked' : '' }}
-                                        id="reference_previous_yes">
+                                               {{ isset($application[0]) && $application[0]->reference_previous_2 == 'yes' ? 'checked' : '' }}
+                                    id="reference_previous_yes">
                                 </td>
                                 <td>
                                     No <input type="checkbox" value="no" name="reference_previous_2"
-                                        {{ isset($application[0]) && $application[0]->reference_previous_2 == 'no' ? 'checked' : '' }}
-                                        id="reference_previous_no">
+                                              {{ isset($application[0]) && $application[0]->reference_previous_2 == 'no' ? 'checked' : '' }}
+                                    id="reference_previous_no">
                                 </td>
                                 <td>
                                     Phone No#
@@ -800,13 +807,13 @@
                                 </td>
                                 <td>
                                     Yes <input type="checkbox" value="yes" name="reference_previous_3"
-                                        {{ isset($application[0]) && $application[0]->reference_previous_3 == 'yes' ? 'checked' : '' }}
-                                        id="reference_previous_yes">
+                                               {{ isset($application[0]) && $application[0]->reference_previous_3 == 'yes' ? 'checked' : '' }}
+                                    id="reference_previous_yes">
                                 </td>
                                 <td>
                                     No <input type="checkbox" value="no" name="reference_previous_3"
-                                        {{ isset($application[0]) && $application[0]->reference_previous_3 == 'no' ? 'checked' : '' }}
-                                        id="reference_previous_no">
+                                              {{ isset($application[0]) && $application[0]->reference_previous_3 == 'no' ? 'checked' : '' }}
+                                    id="reference_previous_no">
                                 </td>
                                 <td>
                                     Phone No#
@@ -852,11 +859,11 @@
                                     <br>
 
                                     <i><strong>Example:</strong>  County employees should seek confirmation only from the Chief Officer of Health (COH)<br>
-                                            <p>
-                                                In the absence of the COH, the officer acting in the capacity of the COH should confirm but the form must bear the stamp of the COH. 
-                                            </p>
-                                        </i>
-                                    
+                                        <p>
+                                            In the absence of the COH, the officer acting in the capacity of the COH should confirm but the form must bear the stamp of the COH. 
+                                        </p>
+                                    </i>
+
 
                                     Department of authorizing officer:
                                 </td>
@@ -892,11 +899,11 @@
                             </tr>
 
 
-                            <th>
-                            <td colspan="4" class="writing_area">
-                                <b>DISCLAIMER AND SIGNATURE</b>
-                            </td>
-                            </th>
+                        <th>
+                        <td colspan="4" class="writing_area">
+                            <b>DISCLAIMER AND SIGNATURE</b>
+                        </td>
+                        </th>
                         <tbody>
                             <tr>
                                 <td colspan="4">
@@ -915,11 +922,11 @@
                                 </td>
                                 <td>
                                     Agree <input type="checkbox" value="Agree" name="disclaimer_1"
-                                        {{ isset($disclaimer[0]) && $disclaimer[0]->disclaimer_1 == 'Agree' ? 'checked' : '' }}
-                                        id="disclaimer_1_agree"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                 {{ isset($disclaimer[0]) && $disclaimer[0]->disclaimer_1 == 'Agree' ? 'checked' : '' }}
+                                    id="disclaimer_1_agree"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     Disagree <input type="checkbox" value="Disagree" name="disclaimer_1"
-                                        {{ isset($disclaimer[0]) && $disclaimer[0]->disclaimer_1 == 'Disagree' ? 'checked' : '' }}
-                                        id="disclaimer_1_disagree">
+                                                    {{ isset($disclaimer[0]) && $disclaimer[0]->disclaimer_1 == 'Disagree' ? 'checked' : '' }}
+                                    id="disclaimer_1_disagree">
 
 
                                 </td>
@@ -935,11 +942,11 @@
                                 </td>
                                 <td>
                                     Agree <input type="checkbox" value="Agree" name="disclaimer_2"
-                                        {{ isset($disclaimer[0]) && $disclaimer[0]->disclaimer_2 == 'Agree' ? 'checked' : '' }}
-                                        id="disclaimer_2_agree"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                 {{ isset($disclaimer[0]) && $disclaimer[0]->disclaimer_2 == 'Agree' ? 'checked' : '' }}
+                                    id="disclaimer_2_agree"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     Disagree <input type="checkbox" value="Disagree" name="disclaimer_2"
-                                        {{ isset($disclaimer[0]) && $disclaimer[0]->disclaimer_2 == 'Disagree' ? 'checked' : '' }}
-                                        id="disclaimer_2_disagree">
+                                                    {{ isset($disclaimer[0]) && $disclaimer[0]->disclaimer_2 == 'Disagree' ? 'checked' : '' }}
+                                    id="disclaimer_2_disagree">
                                 </td>
                             </tr>
                             <tr>

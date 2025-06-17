@@ -58,7 +58,7 @@
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('enroll.myCourses') ? 'active' : '' }}" href="{{ route('enroll.myCourses') }}">My Scholarships</a>
                             </li>
-                            @can('enrollment_access')
+                            @can('full_menu')
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('admin.enrollments.index') ? 'active' : '' }}" href="{{ route('admin.enrollments.index') }}">Admin Area</a>
                             </li>

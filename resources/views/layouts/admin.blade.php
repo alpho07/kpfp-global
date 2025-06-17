@@ -36,6 +36,10 @@
               href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/css/colors.min.css">
 
         <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
         @yield('styles')
     </head>
 
@@ -96,6 +100,7 @@
                 {{ csrf_field() }}
             </form>
         </div>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 
         <script src="//code.jquery.com/jquery-3.7.1.js"></script>
@@ -128,114 +133,114 @@
         <link rel="stylesheet" href="//code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
 
         <script>
-                            $(function() {
-                            $(".datepicker").datepicker({
-                            //showAnim: "explode",
-                            dateFormat: "yy-mm-dd", // Preferred date format
-                                    changeMonth: true, // Enable month dropdown
-                                    changeYear: true, // Enable year dropdown
-                                    // yearRange: "2025:2016", // Show years from 1920 to 2016
-                                    defaultDate: new Date(2025, 0, 1)
-                            });
-                            let copyButtonTrans = '{{ trans('global.datatables.copy') }}'
-                                    let csvButtonTrans = '{{ trans('global.datatables.csv') }}'
-                                    let excelButtonTrans = '{{ trans('global.datatables.excel') }}'
-                                    let pdfButtonTrans = '{{ trans('global.datatables.pdf') }}'
-                                    let printButtonTrans = '{{ trans('global.datatables.print') }}'
-                                    let colvisButtonTrans = '{{ trans('global.datatables.colvis') }}'
+                                                                                                    $(function() {
+                                                                                                    $(".datepicker").datepicker({
+                                                                                                    //showAnim: "explode",
+                                                                                                    dateFormat: "yy-mm-dd", // Preferred date format
+                                                                                                            changeMonth: true, // Enable month dropdown
+                                                                                                            changeYear: true, // Enable year dropdown
+                                                                                                            // yearRange: "2025:2016", // Show years from 1920 to 2016
+                                                                                                            defaultDate: new Date(2025, 0, 1)
+                                                                                                    });
+                                                                                                    let copyButtonTrans = '{{ trans('global.datatables.copy') }}'
+                                                                                                            let csvButtonTrans = '{{ trans('global.datatables.csv') }}'
+                                                                                                            let excelButtonTrans = '{{ trans('global.datatables.excel') }}'
+                                                                                                            let pdfButtonTrans = '{{ trans('global.datatables.pdf') }}'
+                                                                                                            let printButtonTrans = '{{ trans('global.datatables.print') }}'
+                                                                                                            let colvisButtonTrans = '{{ trans('global.datatables.colvis') }}'
 
-                                    let languages = {
-                                    'en': 'https://cdn.datatables.net/plug-ins/1.10.19/i18n/English.json'
-                                    };
-                            $.extend(true, $.fn.dataTable.Buttons.defaults.dom.button, {
-                            className: 'btn'
-                            })
-                                    $.extend(true, $.fn.dataTable.defaults, {
-                                    language: {
-                                    url: languages['{{ app()->getLocale() }}']
-                                    },
-                                            columnDefs: [{
-                                            orderable: false,
-                                                    className: 'select-checkbox',
-                                                    targets: 0
-                                            }, {
-                                            orderable: false,
-                                                    searchable: false,
-                                                    targets: - 1
-                                            }],
-                                            select: {
-                                            style: 'multi+shift',
-                                                    selector: 'td:first-child'
-                                            },
-                                            order: [],
-                                            scrollX: true,
-                                            pageLength: 100,
-                                            dom: 'lBfrtip<"actions">',
-                                            buttons: [{
-                                            extend: 'copy',
-                                                    className: 'btn-default',
-                                                    text: copyButtonTrans,
-                                                    exportOptions: {
-                                                    columns: ':visible'
-                                                    }
-                                            },
-                                            {
-                                            extend: 'csv',
-                                                    className: 'btn-default',
-                                                    text: csvButtonTrans,
-                                                    exportOptions: {
-                                                    columns: ':visible'
-                                                    }
-                                            },
-                                            {
-                                            extend: 'excel',
-                                                    className: 'btn-default',
-                                                    text: excelButtonTrans,
-                                                    exportOptions: {
-                                                    columns: ':visible'
-                                                    }
-                                            },
-                                            {
-                                            extend: 'pdf',
-                                                    className: 'btn-default',
-                                                    text: pdfButtonTrans,
-                                                    exportOptions: {
-                                                    columns: ':visible'
-                                                    }
-                                            },
-                                            {
-                                            extend: 'print',
-                                                    className: 'btn-default',
-                                                    text: printButtonTrans,
-                                                    exportOptions: {
-                                                    columns: ':visible'
-                                                    }
-                                            },
-                                            {
-                                            extend: 'colvis',
-                                                    className: 'btn-default',
-                                                    text: colvisButtonTrans,
-                                                    exportOptions: {
-                                                    columns: ':visible'
-                                                    }
-                                            }
-                                            ]
-                                    });
-                            $.fn.dataTable.ext.classes.sPageButton = '';
-                            });
-                            ClassicEditor
-                                    .create(document.querySelector('#editor'), {
-                                    toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'mediaEmbed', 'sourceEditing' ],
-                                            heading: {
-                                            options: [
-                                            { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                                            { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-                                            ]
-                                            }
-                                    })
-                                    .catch(error => {
-                                    console.log(error);
-                                    });
+                                                                                                            let languages = {
+                                                                                                            'en': 'https://cdn.datatables.net/plug-ins/1.10.19/i18n/English.json'
+                                                                                                            };
+                                                                                                    $.extend(true, $.fn.dataTable.Buttons.defaults.dom.button, {
+                                                                                                    className: 'btn'
+                                                                                                    })
+                                                                                                            $.extend(true, $.fn.dataTable.defaults, {
+                                                                                                            language: {
+                                                                                                            url: languages['{{ app()->getLocale() }}']
+                                                                                                            },
+                                                                                                                    columnDefs: [{
+                                                                                                                    orderable: false,
+                                                                                                                            className: 'select-checkbox',
+                                                                                                                            targets: 0
+                                                                                                                    }, {
+                                                                                                                    orderable: false,
+                                                                                                                            searchable: false,
+                                                                                                                            targets: - 1
+                                                                                                                    }],
+                                                                                                                    select: {
+                                                                                                                    style: 'multi+shift',
+                                                                                                                            selector: 'td:first-child'
+                                                                                                                    },
+                                                                                                                    order: [],
+                                                                                                                    scrollX: true,
+                                                                                                                    pageLength: 100,
+                                                                                                                    dom: 'lBfrtip<"actions">',
+                                                                                                                    buttons: [{
+                                                                                                                    extend: 'copy',
+                                                                                                                            className: 'btn-default',
+                                                                                                                            text: copyButtonTrans,
+                                                                                                                            exportOptions: {
+                                                                                                                            columns: ':visible'
+                                                                                                                            }
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                    extend: 'csv',
+                                                                                                                            className: 'btn-default',
+                                                                                                                            text: csvButtonTrans,
+                                                                                                                            exportOptions: {
+                                                                                                                            columns: ':visible'
+                                                                                                                            }
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                    extend: 'excel',
+                                                                                                                            className: 'btn-default',
+                                                                                                                            text: excelButtonTrans,
+                                                                                                                            exportOptions: {
+                                                                                                                            columns: ':visible'
+                                                                                                                            }
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                    extend: 'pdf',
+                                                                                                                            className: 'btn-default',
+                                                                                                                            text: pdfButtonTrans,
+                                                                                                                            exportOptions: {
+                                                                                                                            columns: ':visible'
+                                                                                                                            }
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                    extend: 'print',
+                                                                                                                            className: 'btn-default',
+                                                                                                                            text: printButtonTrans,
+                                                                                                                            exportOptions: {
+                                                                                                                            columns: ':visible'
+                                                                                                                            }
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                    extend: 'colvis',
+                                                                                                                            className: 'btn-default',
+                                                                                                                            text: colvisButtonTrans,
+                                                                                                                            exportOptions: {
+                                                                                                                            columns: ':visible'
+                                                                                                                            }
+                                                                                                                    }
+                                                                                                                    ]
+                                                                                                            });
+                                                                                                    $.fn.dataTable.ext.classes.sPageButton = '';
+                                                                                                    });
+                                                                                                    ClassicEditor
+                                                                                                            .create(document.querySelector('#editor'), {
+                                                                                                            toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'mediaEmbed', 'sourceEditing' ],
+                                                                                                                    heading: {
+                                                                                                                    options: [
+                                                                                                                    { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                                                                                                                    { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                                                                                                                    ]
+                                                                                                                    }
+                                                                                                            })
+                                                                                                            .catch(error => {
+                                                                                                            console.log(error);
+                                                                                                            });
 
         </script>
         @yield('scripts')

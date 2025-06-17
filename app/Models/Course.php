@@ -37,12 +37,16 @@ class Course extends BaseModel implements HasMedia {
         'application_end_date'
     ];
     protected $casts = [
-    'application_start_date' => 'datetime',
-    'application_end_date' => 'datetime',
-];
+        'application_start_date' => 'datetime',
+        'application_end_date' => 'datetime',
+    ];
 
     public function course_manager() {
         return $this->HasOne(\App\Models\CourseManager::class, 'id', 'manager_id');
+    }
+
+    public function requirements() {
+        return $this->hasMany(\App\Models\CourseRequirements::class);
     }
 
     public function registerMediaConversions(Media $media = null): void {

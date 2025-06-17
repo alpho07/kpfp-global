@@ -12,14 +12,16 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
-{
-    use SoftDeletes, Notifiable, HasApiTokens, HasRoles;
+class User extends Authenticatable {
+
+    use SoftDeletes,
+        Notifiable,
+        HasApiTokens,
+        HasRoles;
 
     public $table = 'users';
 
-    protected function casts(): array
-    {
+    protected function casts(): array {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
@@ -30,14 +32,12 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
     protected $dates = [
         'updated_at',
         'created_at',
         'deleted_at',
         'email_verified_at',
     ];
-
     protected $fillable = [
         'first_name',
         'middle_name',
@@ -60,75 +60,61 @@ class User extends Authenticatable
         'institution_id',
         'email_verified_at',
     ];
-
     protected $with = ['roles'];
 
-    public function enrollments()
-    {
+    public function enrollments() {
         return $this->hasMany(Enrollment::class, 'user_id', 'id');
     }
 
-    public function getEmailVerifiedAtAttribute($value)
-    {
+    public function getEmailVerifiedAtAttribute($value) {
         return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('panel.date_format') . ' ' . config('panel.time_format')) : null;
     }
 
-    public function setEmailVerifiedAtAttribute($value)
-    {
+    public function setEmailVerifiedAtAttribute($value) {
         $this->attributes['email_verified_at'] = $value ? Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $value)->format('Y-m-d H:i:s') : null;
     }
 
-    public function setPasswordAttribute($input)
-    {
+    public function setPasswordAttribute($input) {
         if ($input) {
             $this->attributes['password'] = app('hash')->needsRehash($input) ? Hash::make($input) : $input;
         }
     }
 
-    public function getFullNameAttribute()
-    {
-        return $this->first_name.' '.$this->last_name;
+    public function getFullNameAttribute() {
+        return $this->first_name . ' ' . $this->last_name;
     }
 
-
-
-    public function getFirstNameAttribute()
-    {
+    public function getFirstName1Attribute() {
         return explode(' ', $this->attributes['first_name'])[0];
     }
 
-
-    public function getLastNameAttribute()
-    {
+    public function getLastName1Attribute() {
         $nameParts = explode(' ', $this->attributes['last_name']);
 
         return count($nameParts) > 1 ? end($nameParts) : null;
     }
 
-
-    public function setNameAttribute($value)
-    {
+    public function setNameAttribute($value) {
         $this->attributes['first_name'] = $value;
     }
 
-
-    public function sendPasswordResetNotification($token)
-    {
+    public function sendPasswordResetNotification($token) {
         $this->notify(new ResetPassword($token));
     }
 
-    public function roles()
-    {
+    public function roles() {
         return $this->belongsToMany(Role::class);
     }
 
-    public function institution()
-    {
+    public function institution() {
         return $this->belongsTo(Institution::class, 'institution_id');
     }
 
-    public function isInstitution()
-    {
+    public function isInstitution() {
         return $this->roles->contains(2);
+    }
+
+    public function getAgeAttribute() {
+        return $this->dob ? Carbon::parse($this->dob)->age : null;
     }
 }

@@ -43,7 +43,6 @@ class EnrollmentController extends Controller {
         if (auth()->guest()) {
             $request->validate([
                 'first_name' => ['required', 'string', 'max:25'],
-                'middle_name' => ['sometimes', 'string', 'max:25'],
                 'last_name' => ['required', 'string', 'max:25'],
                 'id_number' => ['required', 'string', 'max:25', 'unique:users'],
                 'email' => 'required|string|email|max:255|unique:users',
@@ -57,6 +56,7 @@ class EnrollmentController extends Controller {
                     'confirmed', // Match password_confirmation
                 ],
                 'gender' => 'required|string',
+                'county' => 'required|string',
                 'phone' => 'required|string|max:20|unique:users',
                 'dob' => 'required|date',
                     //'country' => 'required',
@@ -157,7 +157,7 @@ class EnrollmentController extends Controller {
         $course = \App\Models\Course::find(session('course_id'));
 
         if (is_null($institution)) {
-            return redirect()->route('home')->with('success', 'Welcome '.$user->first_name.', Your registration is successfull!');
+            return redirect()->route('home')->with('success', 'Welcome ' . $user->first_name . ', Your registration is successfull!');
         } else {
             return view('enrollment.confirmation', compact(['user', 'institution', 'course']));
         }
@@ -172,7 +172,7 @@ class EnrollmentController extends Controller {
         $breadcrumb = "MY SCHOLARSHIP APPLICATIONS";
         $user_id = auth()->user()->id;
         $checklist = $this->getChecklistHandler();
-        $enrollments = $checklist::where('application_id', $user_id)->with(['application', 'institution'])->orderBy('id','desc')->get();
+        $enrollments = $checklist::where('application_id', $user_id)->with(['application', 'institution'])->orderBy('id', 'desc')->get();
 
         // return $enrollments;
 
@@ -200,6 +200,7 @@ class EnrollmentController extends Controller {
 
         $step = request('q');
         $user_id = auth()->user()->id;
+        $applicant = User::find($user_id);
         $documents = UploadsManager::all();
         $uploaded_documents = ApplicantsUploads::where('student_id', $user_id)->where('course_id', $course->id)->where('institution_id', $course->institution_id)->get();
 
@@ -228,12 +229,12 @@ class EnrollmentController extends Controller {
         $employment = $checklist[0]['employment'] ?? [];
         $disclaimer = [0 => $checklist[0]['disclaimer'] ?? []];
 
-        return view('courses.apply', compact(['course', 'uploaded_documents', 'breadcrumb', 'checklist', 'step', 'application', 'academic_history', 'qualification_attained', 'professional_reference', 'employment', 'disclaimer', 'documents', 'progress']));
+        return view('courses.apply', compact(['course', 'uploaded_documents', 'breadcrumb', 'checklist', 'step', 'application', 'academic_history', 'qualification_attained', 'professional_reference', 'employment', 'disclaimer', 'documents', 'progress', 'applicant']));
     }
 
     public function upload($checklist_id = 0, Course $course, Request $request) {
         $request->validate([
-            'document' => 'required|mimes:pdf,jpg,jpeg,png|max:2048',
+            'document' => 'required|mimes:pdf,jpg,jpeg,png|max:5120',
             'document_id' => 'required|exists:uploads_managers,id',
         ]);
 
@@ -277,7 +278,7 @@ class EnrollmentController extends Controller {
     public function upload_other(Applications $scholarship, Course $course, Request $request) {
 
         $request->validate([
-            'document' => 'required|mimes:pdf,zip,xlsx,docx,doc,xls|max:2048',
+            'document' => 'required|mimes:pdf,zip,xlsx,docx,doc,xls|max:5120',
             'document_id' => 'required|exists:uploads_managers,id',
         ]);
 
@@ -321,6 +322,9 @@ class EnrollmentController extends Controller {
                 'proof_of_payment' => $last_id,
                 'stage' => '50%'
             ]);
+
+            $zoho = app(ZohoMailService::class);
+            $result = $zoho->sendMailable($student->email, new \App\Mail\ProofOfPaymentMail($student));
         } elseif ($request->document_id == 15) {
 
 

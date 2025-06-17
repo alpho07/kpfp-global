@@ -38,6 +38,20 @@
             transform: translateY(0);
         }
     }
+
+ 
+
+
+    #apply-btn1 {
+        pointer-events: none;
+        opacity: 0.6;
+        cursor: not-allowed;
+        transition: opacity 0.3s ease;
+    }
+
+    #apply-btn1:hover {
+        text-decoration: none;
+    }
 </style>
 <div id="scrollProgress"></div>
 
@@ -47,8 +61,7 @@
         const docHeight = document.body.scrollHeight - window.innerHeight;
         const scrollPercent = (scrollTop / docHeight) * 100;
         document.getElementById('scrollProgress').style.width = scrollPercent + '%';
-    });
-</script>
+    });</script>
 
 <section class="section_padding" style="min-height: 100vh; background: linear-gradient(to bottom right, #e0e7ff, #fdf2f8);">
     <div class="container fade-up">
@@ -89,9 +102,20 @@
 
                     <h4 class="mt-4">📌 Scholarship Requirements</h4>
                     <ol>
-                        <li>Must be employed in a government hospital (preferably KPFP phase 1 sites)</li>
-                        <li>Must be willing to complete training and bonded commitment</li>
-                        <li>Must not be a previous KPFP scholarship beneficiary</li>
+                        <li>Must be working in a Government Hospital, (priority to KPFP phase 1
+                            beneficiary facilities), faculty in University of Nairobi,
+                            Aga Khan
+                            University, Moi University, Gertrude’s/other public medical
+                            training
+                            institution, NEST sites, College of Paediatrics sites,
+                            National/County teaching & referral hospitals, FBO
+                            hospitals.</li>
+                        <li>Must be from Eastern Africa region (Uganda, Tanzania, Ethiopia, Sudan,
+                            South
+                            Sudan) and ELMA supported countries (Malawi, Rwanda) for the
+                            paeditricians.</li>
+                        <li>Must be committed to complete training and bonding without defaulting.</li>
+                        <li>Must not be a previous KPFP scholarship beneficiary.</li>
                     </ol>
 
                     <hr>
@@ -102,24 +126,92 @@
 
             <div class="col-lg-4">
                 <div class="glass-box">
-                    <ul class="list-unstyled">
+                    <ul class="list-unstyled mb-3">
                         @if ($course->institution)
                         <li class="mb-2"><strong>Offered By:</strong> {{ $course->institution->name }}</li>
                         @endif
                         <li class="mb-2"><strong>Duration:</strong> {{ $course->course->period->name }}</li>
                         <li class="mb-2"><strong>Cost:</strong> Fully Sponsored</li>
                     </ul>
-                    <a href="{{ route('apply.scholarship', [0, $course->id]) }}?q=#step-1" class="btn btn-primary w-100 fw-bold">Apply Now</a>
+
+                    @if($course->requirements && $course->requirements->count())
+                    <div class="mb-3">
+                        <p><strong>Minimum requirements to proceed:</strong></p>
+                        <form id="requirement-check-form">
+                            @foreach($course->requirements as $index => $requirement)
+                            <div class="form-check mb-2">
+                                <input
+                                    class="form-check-input requirement-checkbox"
+                                    type="checkbox"
+                                    value="1"
+                                    id="requirement_{{ $index }}"
+                                    {{ $requirement->mandatory ? 'required data-mandatory="1"' : 'data-mandatory="0"' }}
+                                >
+                                <label class="form-check-label" for="requirement_{{ $index }}">
+                                    {{ $requirement->text }}
+                                    @if($requirement->mandatory)
+                                    <span class="text-danger">*</span>
+                                    @endif
+                                </label>
+                            </div>
+                            @endforeach
+                        </form>
+                        <small class="text-muted d-block mt-2">Fields marked with <span class="text-danger">*</span> must be acknowledged to enable the application.</small>
+                    </div>
+                    @endif
+
+                    <a href="{{ route('apply.scholarship', [0, $course->id]) }}?q=#step-1"
+                       class="btn btn-primary w-100 fw-bold disabled-link"
+                       id="apply-btn"
+                       >
+                        Apply Now
+                    </a>
                 </div>
             </div>
+
         </div>
 
-    
+
     </div>
 </section>
 
 <!-- Include Bootstrap CSS/JS if needed -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+                           document.addEventListener('DOMContentLoaded', function () {
+                               const applyBtn = document.getElementById('apply-btn');
+                               const mandatoryCheckboxes = document.querySelectorAll('.requirement-checkbox[data-mandatory="1"]');
+
+                               function validateRequirements() {
+                                   // Check if all mandatory requirements are checked
+                                   const allMandatoryChecked = Array.from(mandatoryCheckboxes).every(checkbox => checkbox.checked);
+
+                                   if (allMandatoryChecked) {
+                                      // alert('checked')
+                                       // Show the button
+                                       //applyBtn.style.display = 'block';
+                                       //applyBtn.classList.remove('disabled-link');
+                                       //applyBtn.removeAttribute('onclick');
+                                   } else {
+                                       // Hide the button
+                                       //applyBtn.style.display = 'none';
+                                   }
+                               }
+                               
+
+                               // Add event listeners to all requirement checkboxes
+                               document.querySelectorAll('.requirement-checkbox').forEach(checkbox => {
+                                   checkbox.addEventListener('change', validateRequirements);
+                                   //alert(1)
+                               });
+
+                               // Initial validation on page load
+                               //validateRequirements();
+                           });
+</script>
+
 
 @endsection

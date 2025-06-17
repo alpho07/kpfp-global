@@ -265,19 +265,22 @@
                     <option value="">-Application Status-</option>
                       <option value="Pending"
                                     {{ old('status', request('status')) == 'Pending' ? 'selected' : '' }}>
-                                Pending</option>
-                            <option value="Approved"
-                                    {{ old('status', request('status')) == 'Approved' ? 'selected' : '' }}>
-                                Approved</option>
+                                Pending</option>                           
                             <option value="Query"
                                     {{ old('status', request('status')) == 'Query' ? 'selected' : '' }}>
                                 Query</option>
+                             <option value="Shortlisted"
+                                    {{ old('status', request('status')) == 'Approved' ? 'selected' : '' }}>
+                                Shortlisted</option>
                             <option value="Rejected"
                                     {{ old('status', request('status')) == 'Rejected' ? 'selected' : '' }}>
                                 Rejected</option>
                             <option value="Selected"
                                     {{ old('status', request('status')) == 'Selected' ? 'selected' : '' }}>
                                 Selected</option>
+                             <option value="Enrolled"
+                                    {{ old('status', request('status')) == 'Selected' ? 'selected' : '' }}>
+                                Enrolled</option>
                 </select>
 
             </div>
@@ -816,18 +819,22 @@
                             <option value="Pending"
                                     {{ @$enrollment->application->status == 'Pending' ? 'selected' : '' }}>
                                 Pending</option>
-                            <option value="Approved"
-                                    {{ @$enrollment->application->status == 'Approved' ? 'selected' : '' }}>
-                                Approved</option>
+                            
                             <option value="Query"
                                     {{ @$enrollment->application->status == 'Query' ? 'selected' : '' }}>
                                 Query</option>
+                            <option value="Shortlisted"
+                                    {{ @$enrollment->application->status == 'Shortlisted' ? 'selected' : '' }}>
+                                Shortlisted</option>
                             <option value="Rejected"
                                     {{ @$enrollment->application->status == 'Rejected' ? 'selected' : '' }}>
                                 Rejected</option>
                             <option value="Selected"
                                     {{ @$enrollment->application->status == 'Selected' ? 'selected' : '' }}>
                                 Selected</option>
+                            <option value="Enrolled"
+                                    {{ @$enrollment->application->status == 'Enrolled' ? 'selected' : '' }}>
+                                Enrolled</option>
                         </select>
                     </td>
 <!--                    <td>

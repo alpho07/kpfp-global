@@ -113,7 +113,7 @@ class EnrollmentsController extends Controller {
 
         $application_id->update($data);
 
-        if ($request->status == 'Approved') {
+        if ($request->status == 'Shortlisted') {
             //Mail::to($user->email)->send(new ApprovedMail($user, $checklist));
             $zoho = app(ZohoMailService::class);
             $result = $zoho->sendMailable($user->email, new ApprovedMail($user, $checklist));

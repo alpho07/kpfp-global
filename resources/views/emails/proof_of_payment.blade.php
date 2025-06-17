@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Welcome to KPFP</title>
+        <title>KPFP Scholarship Proof of Payment upload</title>
         <style>
             body {
                 font-family: 'Segoe UI', sans-serif;
@@ -49,27 +49,17 @@
     </head>
     <body>
         <div class="container">
-            <div class="header" style="background: green;color:white;">
-                <h2>{{$courseName}} Application Accepted</h2>
+            <div class="header">
+                <h2>KPFP Scholarship Application Progress</h2>
             </div>
 
             <div class="content">
                 <p>Dear {{ $user }},</p>
 
-                <p>Thank you for applying to join the <strong>Kenya Paediatric Fellowship Program (KPFP)</strong>. We're excited to inform you that your application to be enrolled in the <strong>{{ $courseName }}</strong> course has been successful.</p>
+                <p>You have successfully uploaded the proof of payment document and has been received by the institution</p>
 
-                <p>The course you selected will take approximately <strong>{{ $courseDuration }} </strong> to complete.</p>
+                <p>Your application is now legible to be reviewed. It will be vetted by the institution you selected during your application. You will receive communication from them once the vetting process is complete.</p>
 
-                <p>For the next steps: </p>
-                <ul>
-                    <li>Login to your KPFP Portal</li>
-                    <li>Find the application listing in your portal applications for the selected institution</li>
-                    <li>Download the bonding form from the link named  "Download" under "Bonding Form" column</li>
-                    <li>Fill in the bonding form<li>
-                    <li>Scan the <b>Bonding form</b> together with the <b>Release form</b> </li>
-                    <li>Upload the scanned documents using the link in the column "Bonding Form"</b> </li>
-                    <li>Wait to be contacted by the institution for Admission information</b> </li>
-                </ul>
 
                 <p>Keep checking your email regularly for important updates and next steps.</p>
 
@@ -80,7 +70,7 @@
             </div>
 
             <div class="footer">
-                 &copy; {{ date('Y') }} Kenya Paediatric Fellowship Program. All rights reserved.
+                &copy; {{ date('Y') }} Kenya Paediatric Fellowship Program. All rights reserved.
             </div>
         </div>
     </body>
