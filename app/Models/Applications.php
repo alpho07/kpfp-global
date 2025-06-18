@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Traits\ScholarshipUtil;
+use App\Notifications\NewApplicationNotification;
 
 class Applications extends Model {
 
     //use HasFactory;
-
-
+    use ScholarshipUtil;
 
     protected $fillable = [
         "id", //primary key increments
@@ -70,6 +71,10 @@ class Applications extends Model {
         'stage',
         'payment_verified'
     ];
+
+    function user() {
+        return $this->belongsTo(User::class, 'application_id');
+    }
 
     function authorized_form_link(): HasOne {
         return $this->hasOne(ApplicantsUploads::class, 'id', 'authorized_form');

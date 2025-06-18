@@ -36,6 +36,10 @@ Route::get('/home', function () {
 });
 
 
+
+Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+Route::post('/notifications/{id}/mark-read', [App\Http\Controllers\NotificationController::class, 'markRead'])->name('notifications.markRead');
+Route::post('/notifications/mark-all-read', [App\Http\Controllers\NotificationController::class, 'markAllRead'])->name('notifications.markAllRead');
 // Password reset request routes
 Route::get('/password/reset/v1', [CustomForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request.custom');
 Route::post('/password/email/v1', [CustomForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email.custom');
@@ -48,7 +52,9 @@ Auth::routes(['register' => false]);
 
 Route::get('/send-mail', [DefaulHomeController::class, 'sendEmail'])->name('email.send');
 
-Route::get('/', [DefaulHomeController::class, 'index'])->name('home');
+Route::get('/test', [DefaulHomeController::class, 'index'])->name('test');
+
+Route::get('/', [DefaulHomeController::class, 'maintenance'])->name('home');
 
 // Enrollment routes
 Route::get('enroll/login', [EnrollmentController::class, 'handleLogin'])
@@ -67,6 +73,10 @@ Route::resource('courses', CourseController::class)->only(['index', 'show']);
 
 Route::get('apply/{checklist?}/{course?}', [EnrollmentController::class, 'apply'])
         ->name('apply.scholarship')
+        ->middleware('auth');
+
+Route::post('scholarship/{applications}', [EnrollmentController::class, 'cancelApplication'])
+        ->name('cancel.application')
         ->middleware('auth');
 
 // Checklist routes
@@ -119,8 +129,6 @@ Route::get('upload-bonding-form/{id}', [EnrollmentController::class, 'uploadBond
         ->name('bonding.form.upload')
         ->middleware('auth');
 
-
-
 Route::get('upload-bonding-form/{scholarship}/{course}', [EnrollmentController::class, 'uploadBondingForm'])
         ->name('bonding.form.upload')
         ->middleware('auth');
@@ -150,11 +158,11 @@ Route::get('step-three/{checklist?}/{course?}', function ($checklist, $course) {
 
 Route::post('/document-upload/{checklist?}/{course?}', [EnrollmentController::class, 'upload'])->name('student.documents.upload')->middleware('auth');
 
-Route::post('/send-otp', [EnrollmentController::class,'sendOtp']);
-Route::get('/validate-otp', [EnrollmentController::class,'verify_otp'])->name('otp.verification');
-Route::post('/verify-otp', [EnrollmentController::class,'verifyOtp'])->name('otp.verify');
+Route::post('/send-otp', [EnrollmentController::class, 'sendOtp']);
+Route::get('/validate-otp', [EnrollmentController::class, 'verify_otp'])->name('otp.verification');
+Route::post('/verify-otp', [EnrollmentController::class, 'verifyOtp'])->name('otp.verify');
 
-Route::get('/post-login', [EnrollmentController::class,'postLogin'])->name('post.login')->middleware('auth');
+Route::get('/post-login', [EnrollmentController::class, 'postLogin'])->name('post.login')->middleware('auth');
 
 Route::get('profile/{id}/edit', [EnrollmentController::class, 'uploadBondingForm'])
         ->name('profile.edit')
@@ -246,7 +254,7 @@ Route::group([
             Route::resource('course-manager', AdminCourseManagerController::class);
 
             // Periods
-            Route::delete('course-period/destroy', [AdminPeriodController::class,'massDestroy'])->name('months.massDestroy');
+            Route::delete('course-period/destroy', [AdminPeriodController::class, 'massDestroy'])->name('months.massDestroy');
             Route::resource('course-period', AdminPeriodController::class);
 
             // Enrollments
@@ -254,8 +262,6 @@ Route::group([
                     ->name('enrollments.massDestroy');
             Route::resource('enrollments', AdminEnrollmentsController::class);
         });
-        
-        
 
 Route::get('/file/{dir1}/{$dir2}/{$dir3}/{$filename}', function ($dir1, $dir2, $dir3, $filename) {
     return Storage::download($dir1 . '/' . $dir2 . '/' . $dir3 . '/' . $filename);

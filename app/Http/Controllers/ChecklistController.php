@@ -242,6 +242,10 @@ class ChecklistController extends Controller {
         $zoho = app(ZohoMailService::class);
         $result = $zoho->sendMailable($user->email, new ApplicationSuccessMail($user, $checklist_base));
 
+        User::whereIn('role', ['Application Manager','Finance Manager','Super Admin'])->get()->each(function ($admin) use ($application) {
+           // $admin->notify(new \NewApplicationNotification($application));
+        });
+
         return redirect()->route('enroll.myCourses')->with('success', 'Application submitted successfully!,Please check your email for next steps');
     }
 
@@ -367,7 +371,7 @@ class ChecklistController extends Controller {
         endfor;
 
         return response()->json([
-        'message' => 'Saved'
+                    'message' => 'Saved'
         ]);
     }
 }

@@ -131,6 +131,8 @@ class Course extends BaseModel implements HasMedia {
         return "Unscheduled";
     }
 
+  
+
     public function getOpensInAttribute(): ?int {
         if ($this->status === 'Upcoming') {
             return now()->diffInDays($this->application_start_date, false);

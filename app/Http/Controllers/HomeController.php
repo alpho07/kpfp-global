@@ -11,10 +11,15 @@ use App\Models\UploadsManager;
 class HomeController extends Controller {
 
     public function index() {
+       
         $newestCourses = []; // Course::orderBy('id', 'desc')->take(3)->get();
         $randomInstitutions = Institution::with('courses')->whereNotIn('id', [3])->get();
 
         return view('home', compact(['newestCourses', 'randomInstitutions']));
+    }
+    
+    function maintenance(){
+        echo '<b> 404 - Site Under Maintenance! </b>';
     }
 
     public function sendEmail() {

@@ -876,7 +876,7 @@
                                         <tr>
                                             <td colspan="1">
                                                 Date available to begin training: <input type="text" readonly
-                                                                                          required
+                                                                                         required
                                                                                          value="{{  $application[0]->date_to_begin ?? '' }}"
                                                                                          name="date_to_begin" id="TRAINING_DATE"
                                                                                          class="nice-input">
@@ -1392,9 +1392,9 @@
                                                 id="reference_previous_yes">
                                             </td>
                                             <td>
-                                                 <input type="radio" value="no" style="display:none"
-                                                          name="reference_previous_111"
-                                                          {{  ($application[0]->reference_previous_111 ?? '') === 'no' ? 'checked' : '' }}
+                                                <input type="radio" value="no" style="display:none"
+                                                       name="reference_previous_111"
+                                                       {{  ($application[0]->reference_previous_111 ?? '') === 'no' ? 'checked' : '' }}
                                                 id="reference_previous_no">
                                             </td>
                                             <td>
@@ -1456,9 +1456,9 @@
                                                 id="reference_previous_yes">
                                             </td>
                                             <td>
-                                                 <input type="radio" value="no" style="display:none"
-                                                          name="reference_previous_222"
-                                                          {{ ($application[0]->reference_previous_222 ?? '') === 'no' ? 'checked' : '' }}
+                                                <input type="radio" value="no" style="display:none"
+                                                       name="reference_previous_222"
+                                                       {{ ($application[0]->reference_previous_222 ?? '') === 'no' ? 'checked' : '' }}
                                                 id="reference_previous_no">
                                             </td>
                                             <td>
@@ -1520,9 +1520,9 @@
                                                 id="reference_previous_yes">
                                             </td>
                                             <td>
-                                                 <input type="radio" value="no" style="display:none"
-                                                          name="reference_previous_333"
-                                                          {{  ($application[0]->reference_previous_333 ?? '') === 'no' ? 'checked' : '' }}
+                                                <input type="radio" value="no" style="display:none"
+                                                       name="reference_previous_333"
+                                                       {{  ($application[0]->reference_previous_333 ?? '') === 'no' ? 'checked' : '' }}
                                                 id="reference_previous_no">
                                             </td>
                                             <td>
@@ -1691,85 +1691,85 @@
 
 
 <script>
-  document.getElementById('years_worked').addEventListener('input', function (e) {
-      this.value = this.value.replace(/[^0-9]/g, '');
-  });
+                                      $('#years_worked').on('input', function () {
+                                          this.value = this.value.replace(/[^0-9]/g, '');
+                                      });
 
-  document.getElementById('Monthly_salary').addEventListener('input', function (e) {
-      this.value = this.value.replace(/[^0-9]/g, '');
-  });
+                                      $('#Monthly_salary').on('input', function () {
+                                          this.value = this.value.replace(/[^0-9]/g, '');
+                                      });
 
-  $(document).ready(function () {
-
-
-      message = "{{session('success')}}";
-
-      if (message !== '') {
-          notyf.open({
-              type: 'success',
-              message: message,
-          });
-      }
+                                      $(document).ready(function () {
 
 
-      function autosaveForm() {
-          var form = $('#myForm');
-          var formData = new FormData(form[0]); // Create FormData object from form
+                                          message = "{{session('success')}}";
 
-          $.ajax({
-              url: "{{route('save.application.autosave', [@$checklist[0]->id, @$course->id])}}", // Get the form's action URL
-              type: 'POST',
-              data: formData,
-              processData: false, // Prevent jQuery from processing the data
-              contentType: false, // Prevent jQuery from setting contentType
-              success: function (response) {
-                  console.log('Form autosaved successfully:', response);
-                  // Optionally show a success message to the user
-              },
-              error: function (xhr, status, error) {
-                  console.error('Autosave failed:', error);
-                  // Optionally show an error message to the user
-              }
-          });
-      }
-
-      // Trigger autosave every 30 seconds
-      // setInterval(autosaveForm, 30000); // 30 seconds in milliseconds
+                                          if (message !== '') {
+                                              notyf.open({
+                                                  type: 'success',
+                                                  message: message,
+                                              });
+                                          }
 
 
+                                          function autosaveForm() {
+                                              var form = $('#myForm');
+                                              var formData = new FormData(form[0]); // Create FormData object from form
 
-      $('#submitBtn').click(function (e) {
-          if ($('#ChecklistForm input[type="checkbox"]:checked').length === 0) {
-              e.preventDefault();
-              const notyf = new Notyf({
-                  duration: 4000, // 4 seconds
-                  ripple: true, // Ripple effect
-                  position: {
-                      x: 'center', // Can be 'left', 'center', 'right'
-                      y: 'top' // Can be 'top', 'center', 'bottom'
-                  },
-                  types: [{
-                          type: 'error',
-                          background: '#dc3545', // Bootstrap danger color
-                          duration: 5000,
-                          dismissible: true, // Allow users to click to dismiss
-                          icon: {
-                              className: 'notyf__icon--error',
-                              tagName: 'i',
+                                              $.ajax({
+                                                  url: "{{route('save.application.autosave', [@$checklist[0]->id, @$course->id])}}", // Get the form's action URL
+                                                  type: 'POST',
+                                                  data: formData,
+                                                  processData: false, // Prevent jQuery from processing the data
+                                                  contentType: false, // Prevent jQuery from setting contentType
+                                                  success: function (response) {
+                                                      console.log('Form autosaved successfully:', response);
+                                                      // Optionally show a success message to the user
+                                                  },
+                                                  error: function (xhr, status, error) {
+                                                      console.error('Autosave failed:', error);
+                                                      // Optionally show an error message to the user
+                                                  }
+                                              });
+                                          }
 
-                          }
-                      }]
-              });
-              notyf.open({
-                  type: 'error',
-                  message: 'Please select at least one item in the checklist(checkbox)',
-              });
-              return false;
-          }
-          $('#ChecklistForm').submit();
-      });
-  });
-  
+                                          // Trigger autosave every 30 seconds
+                                          // setInterval(autosaveForm, 30000); // 30 seconds in milliseconds
+
+
+
+                                          $('#submitBtn').click(function (e) {
+                                              if ($('#ChecklistForm input[type="checkbox"]:checked').length === 0) {
+                                                  e.preventDefault();
+                                                  const notyf = new Notyf({
+                                                      duration: 4000, // 4 seconds
+                                                      ripple: true, // Ripple effect
+                                                      position: {
+                                                          x: 'center', // Can be 'left', 'center', 'right'
+                                                          y: 'top' // Can be 'top', 'center', 'bottom'
+                                                      },
+                                                      types: [{
+                                                              type: 'error',
+                                                              background: '#dc3545', // Bootstrap danger color
+                                                              duration: 5000,
+                                                              dismissible: true, // Allow users to click to dismiss
+                                                              icon: {
+                                                                  className: 'notyf__icon--error',
+                                                                  tagName: 'i',
+
+                                                              }
+                                                          }]
+                                                  });
+                                                  notyf.open({
+                                                      type: 'error',
+                                                      message: 'Please select at least one item in the checklist(checkbox)',
+                                                  });
+                                                  return false;
+                                              }
+                                              $('#ChecklistForm').submit();
+                                          });
+                                      });
+
 
 </script>
 

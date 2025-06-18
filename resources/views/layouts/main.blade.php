@@ -65,7 +65,7 @@
 
         <script>
 $(function () {
-    validateForm();
+   // validateForm();
     $('#PS').click(function () {
         $('#personal_statement').css('display', 'block');
     });

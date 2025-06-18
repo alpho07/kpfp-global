@@ -64,6 +64,31 @@
                         @csrf
                     </form>
                 </li>
+                @auth
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link" href="#" id="notificationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+                        @if(auth()->user()->unreadNotifications->count())
+                        <span class="badge badge-danger">{{ auth()->user()->unreadNotifications->count() }}</span>
+                        @endif
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationDropdown" style="min-width: 300px; max-height: 400px; overflow-y: auto;">
+                        <h6 class="dropdown-header">Notifications</h6>
+                        @forelse(auth()->user()->notifications->take(10) as $notification)
+                        <a href="{{ $notification->data['url'] ?? '#' }}" class="dropdown-item {{ $notification->read_at ? '' : 'font-weight-bold' }}">
+                            {{ $notification->data['message'] }}
+                            <br>
+                            <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                        </a>
+                        @empty
+                        <span class="dropdown-item text-muted">No notifications</span>
+                        @endforelse
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ route('notifications.index') }}" class="dropdown-item text-center">View All</a>
+                    </div>
+                </li>
+                @endauth
 
             </ul>
         </header>

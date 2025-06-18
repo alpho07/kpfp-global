@@ -14,11 +14,27 @@
         vertical-align: middle;
         text-align: center;
     }
-    .badge-success { background-color: #28a745; }
-    .badge-danger { background-color: #dc3545; }
+    .badge-success {
+        background-color: #28a745;
+    }
+    .badge-danger {
+        background-color: #dc3545;
+    }
     .btn-sm {
         font-size: 0.8rem;
     }
+    /* Fix modal z-index to appear above header */
+    .modal {
+        z-index: 10000 !important;
+    }
+    .modal-backdrop {
+        z-index: 9999 !important;
+    }
+
+    .menu_fixed{
+        z-index: 999 !important;
+    }
+
 </style>
 @endpush
 
@@ -32,6 +48,17 @@
         @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert" data-aos="fade-down">
             {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        @endif
+
+        @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" data-aos="fade-down">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
         @endif
@@ -63,6 +90,7 @@
                         <th>Phone</th>
                         <th>Bonding Form</th>
                         <th>Actions</th>
+                        <th>Cancel</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -77,20 +105,22 @@
                         </td>
                         <td>
                             @if ($enrollment->application && $enrollment->application->authorized_form == 'Not Uploaded')
-                                <a href="{{ route('pre.auth.upload', [$enrollment->id, $enrollment->scholarship_id]) }}"
-                                   class="btn btn-sm btn-outline-info">
-                                    Upload
-                                </a>
+                            @if($enrollment->application->status !='Cancelled')
+                            <a href="{{ route('pre.auth.upload', [$enrollment->id, $enrollment->scholarship_id]) }}"
+                               class="btn btn-sm btn-outline-info">
+                                Upload
+                            </a>
+                            @endif
                             @else
-                                <a href="{{ @Storage::url($enrollment->application->authorized_form_link->file_path) }}"
-                                   class="btn btn-sm btn-outline-success mb-1">
-                                    Download
-                                </a><br>
-                                <small class="text-muted">or</small><br>
-                                <a href="{{ route('pre.auth.upload', [$enrollment->id, $enrollment->scholarship_id]) }}"
-                                   class="btn btn-sm btn-outline-warning mt-1" title="Re-upload only if necessary">
-                                    Re-Upload
-                                </a>
+                            <a href="{{ @Storage::url($enrollment->application->authorized_form_link->file_path) }}"
+                               class="btn btn-sm btn-outline-success mb-1">
+                                Download
+                            </a><br>
+                            <small class="text-muted">or</small><br>
+                            <a href="{{ route('pre.auth.upload', [$enrollment->id, $enrollment->scholarship_id]) }}"
+                               class="btn btn-sm btn-outline-warning mt-1" title="Re-upload only if necessary">
+                                Re-Upload
+                            </a>
                             @endif
                         </td>
                         <td>{{ $enrollment->institution->name }}</td>
@@ -106,7 +136,7 @@
                         </td>
                         <td>{{ @$enrollment->application->created_at->format('Y-m-d') }}</td>
                         <td>
-                            <span class="badge badge-{{ in_array(@$enrollment->application->status, ['Rejected', 'Query']) ? 'danger' : 'success' }}">
+                            <span class="badge badge-{{ in_array(@$enrollment->application->status, ['Rejected', 'Query', 'Cancelled']) ? 'danger' : 'success' }}">
                                 {{ @$enrollment->application->status }}
                             </span>
                             @if (in_array(@$enrollment->application->status, ['Rejected', 'Query']))
@@ -120,73 +150,127 @@
                         <td>{{ @$enrollment->application->gender }}</td>
                         <td>{{ @$enrollment->application->phone_no }}</td>
                         <td>
-                            
                             @if ($enrollment->application->bonding_form == 'Not Sent')
-                                <span class="text-muted">N/A</span>
+                            <span class="text-muted">N/A</span>
                             @elseif($enrollment->application->bonding_form == 'Sent')
-                                <a href="{{ route('bonding.form.upload', [$enrollment->id, $enrollment->scholarship_id]) }}"
-                                   class="btn btn-sm btn-outline-info">Upload</a>
+                            <a href="{{ route('bonding.form.upload', [$enrollment->id, $enrollment->scholarship_id]) }}"
+                               class="btn btn-sm btn-outline-info">Upload</a>
                             @else
-                                <a href="{{ @Storage::url(@$enrollment->application->bonding_form_link->file_path) }}"
-                                   class="btn btn-sm btn-outline-primary">Download</a>
-                                <a href="{{route('bonding.form.upload',[@$enrollment->application->id, @$enrollment->application->scholarship_id])}}"
-                                   class="btn btn-sm btn-warning mt-1">
-                                   <small>Re-Upload</small>
-                                </a>
+                            <a href="{{ @Storage::url(@$enrollment->application->bonding_form_link->file_path) }}"
+                               class="btn btn-sm btn-outline-primary">Download</a>
+                            <a href="{{route('bonding.form.upload',[@$enrollment->application->id, @$enrollment->application->scholarship_id])}}"
+                               class="btn btn-sm btn-warning mt-1">
+                                <small>Re-Upload</small>
+                            </a>
                             @endif
                         </td>
                         <td>
                             @if ($enrollment->application->authorized_form !== 'Not Uploaded')
-                                <span class="text-muted">-</span>
+                            <span class="text-muted">-</span>
                             @else
-                                <a href="{{ route('apply.scholarship', [$enrollment->id, $enrollment->scholarship_id]) }}"
-                                   class="btn btn-sm btn-outline-secondary">Edit</a>
+                            @if($enrollment->application->status !='Cancelled')
+                            <a href="{{ route('apply.scholarship', [$enrollment->id, $enrollment->scholarship_id]) }}"
+                               class="btn btn-sm btn-outline-secondary">Edit</a>
+                            @endif
+                            @endif
+                        </td>
+                        <td>
+                            @if (in_array(@$enrollment->application->status, ['Pending', 'Approved', 'Query']))
+                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#cancelModal{{$enrollment->application->id}}" data-application-id="{{ $enrollment->application->id }}" data-scholarship-id="{{ $enrollment->scholarship_id }}">
+                                Cancel
+                            </button>
+                            @else
+                            <span class="text-muted">-</span>
                             @endif
                         </td>
                     </tr>
 
                     @if(@$enrollment->institution->payment_option->status=='Yes')
-                        <tr data-aos="fade-right">
-                            <td colspan="17">
-                                @if (is_null($enrollment->application->proof_of_payment))
-                                    <div class="alert alert-danger">
-                                        Hello {{ auth()->user()->first_name }}, you must upload the payment proof to complete your application.
-                                        <a href="{{ route('proof.auth.load', [$enrollment->id, $enrollment->scholarship_id]) }}">Click here</a>
-                                    </div>
-                                @else
-                                    <div class="alert alert-success">
-                                        Payment Proof Uploaded |
-                                        <a href="{{ route('proof.auth.load', [$enrollment->id, $enrollment->scholarship_id]) }}">Update</a>
-                                    </div>
-                                @endif
-                            </td>
-                        </tr>
-                    @endif
-                    @empty
-                    <tr>
-                        <td colspan="17">
-                            <div class="alert alert-warning">
-                                You haven't applied for any scholarships yet.
-                                <a href="{{ route('home') }}">Explore Available Scholarships</a>
+
+                    <tr data-aos="fade-right">
+                        <td colspan="18">
+                            @if (is_null($enrollment->application->proof_of_payment))
+                            @if($enrollment->application->status !='Cancelled')
+                            <div class="alert alert-danger">
+                                Hello {{ auth()->user()->first_name }}, you must upload the payment proof to complete your application.
+                                <a href="{{ route('proof.auth.load', [$enrollment->id, $enrollment->scholarship_id]) }}">Click here</a>
                             </div>
+                            @else
+                             @if($enrollment->application->status !='Cancelled')
+                            <div class="alert alert-success">
+                                Payment Proof Uploaded |
+                                <a href="{{ route('proof.auth.load', [$enrollment->id, $enrollment->scholarship_id]) }}">Update</a>
+                            </div>
+                             @endif
+                            @endif
+                            @endif
                         </td>
-                    </tr>
-                    @endforelse
+
+                        <!-- Cancel Confirmation Modal -->
+                <div class="modal fade" id="cancelModal{{$enrollment->application->id}}" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form id="cancelForm" method="POST" action="{{route('cancel.application',[$enrollment->application->id])}}">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="cancelModalLabel">Confirm Cancellation</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure you want to cancel this application? <strong>Applying for another course will require a new application fee.</strong></p>
+                                    <div class="mb-3">
+                                        <label for="cancellation_reason" class="form-label">Please provide a reason for cancellation <span class="text-danger">*</span></label>
+                                        <textarea class="form-control" id="cancellation_reason" name="cancellation_reason" rows="4" required></textarea>
+                                        <div class="invalid-feedback">
+                                            Please provide a reason for cancellation.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+
+                                    @csrf
+
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-danger" id="confirmCancelBtn">Confirm Cancellation</button>
+
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+                </tr>
+                @endif
+                @empty
+                <tr>
+                    <td colspan="18">
+                        <div class="alert alert-warning">
+                            You haven't applied for any scholarships yet.
+                            <a href="{{ route('home') }}">Explore Available Scholarships</a>
+                        </div>
+                    </td>
+                </tr>
+
+
+
+                @endforelse
                 </tbody>
             </table>
         </div>
+
+
     </div>
 </div>
 
-@push('scripts')
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
-    AOS.init({
-        duration: 700,
-        once: true
-    });
+                                AOS.init({
+                                duration: 700,
+                                        once: true
+                                });
+
+
 </script>
-@endpush
 
 @endsection

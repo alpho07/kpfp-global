@@ -39,7 +39,7 @@
         }
     }
 
- 
+
 
 
     #apply-btn1 {
@@ -67,6 +67,15 @@
     <div class="container fade-up">
         <div class="text-center mb-4">
             <h2 class="fw-bold">{{ $course->course->name }} <small class="text-muted">Scholarship Application</small></h2>
+        </div>
+        <div class="row col-md-12">
+
+            @foreach ($errors->all() as $error)
+            <div class="alert alert-error" role="alert" style="background: #E8422F; color: white; font-weight: bold;">
+                {{ $error }}
+            </div>
+            @endforeach 
+
         </div>
 
         <div class="row">
@@ -181,36 +190,36 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-                           document.addEventListener('DOMContentLoaded', function () {
-                               const applyBtn = document.getElementById('apply-btn');
-                               const mandatoryCheckboxes = document.querySelectorAll('.requirement-checkbox[data-mandatory="1"]');
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const applyBtn = document.getElementById('apply-btn');
+                            const mandatoryCheckboxes = document.querySelectorAll('.requirement-checkbox[data-mandatory="1"]');
 
-                               function validateRequirements() {
-                                   // Check if all mandatory requirements are checked
-                                   const allMandatoryChecked = Array.from(mandatoryCheckboxes).every(checkbox => checkbox.checked);
+                            function validateRequirements() {
+                                // Check if all mandatory requirements are checked
+                                const allMandatoryChecked = Array.from(mandatoryCheckboxes).every(checkbox => checkbox.checked);
 
-                                   if (allMandatoryChecked) {
-                                      // alert('checked')
-                                       // Show the button
-                                       //applyBtn.style.display = 'block';
-                                       //applyBtn.classList.remove('disabled-link');
-                                       //applyBtn.removeAttribute('onclick');
-                                   } else {
-                                       // Hide the button
-                                       //applyBtn.style.display = 'none';
-                                   }
-                               }
-                               
+                                if (allMandatoryChecked) {
+                                    // alert('checked')
+                                    // Show the button
+                                    //applyBtn.style.display = 'block';
+                                    //applyBtn.classList.remove('disabled-link');
+                                    //applyBtn.removeAttribute('onclick');
+                                } else {
+                                    // Hide the button
+                                    //applyBtn.style.display = 'none';
+                                }
+                            }
 
-                               // Add event listeners to all requirement checkboxes
-                               document.querySelectorAll('.requirement-checkbox').forEach(checkbox => {
-                                   checkbox.addEventListener('change', validateRequirements);
-                                   //alert(1)
-                               });
 
-                               // Initial validation on page load
-                               //validateRequirements();
-                           });
+                            // Add event listeners to all requirement checkboxes
+                            document.querySelectorAll('.requirement-checkbox').forEach(checkbox => {
+                                checkbox.addEventListener('change', validateRequirements);
+                                //alert(1)
+                            });
+
+                            // Initial validation on page load
+                            //validateRequirements();
+                        });
 </script>
 
 

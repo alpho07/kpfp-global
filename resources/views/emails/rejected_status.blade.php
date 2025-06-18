@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>KPFP - Candidate Shortlisted</title>
+        <title>KPFP - Candidate Rejected</title>
         <style>
             body {
                 font-family: 'Segoe UI', sans-serif;
@@ -49,7 +49,7 @@
     </head>
     <body>
         <div class="container">
-            <div class="header" style='background: red;color:white;'>
+            <div class="header" style='background: gray;color:white;'>
                 <h2>Scholarship Application Status Update : REJECTED</h2>
             </div>
 

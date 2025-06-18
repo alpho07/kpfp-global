@@ -27,7 +27,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use App\Notifications\ProofOfPaymentUploadNotification;
 use Carbon\Carbon;
+use Auth;
 
 class EnrollmentController extends Controller {
 
@@ -193,9 +195,16 @@ class EnrollmentController extends Controller {
         return view('courses.proof_of_payment', compact('course', 'user_id', 'payment_details', 'scholarship'));
     }
 
+    public function cancelApplication($application, request $r) {
+        Applications::where('id', $application)
+                ->update([
+                    'status' => 'Cancelled',
+                    'comments' => $r->cancellation_reason
+        ]);
+    }
+
     public function apply($checklist_id = 0, Course $course, Request $r) {
 
-        //dd($course);
 
 
         $step = request('q');
@@ -218,6 +227,21 @@ class EnrollmentController extends Controller {
         } else {
             $checklist = Checklist::where('application_id', $user_id)->where('scholarship_id', $course->id)->where('institution_id', $course->institution_id)->get();
         }
+
+
+
+        // Check if the user has a pending application
+        $hasPendingApplication = Auth::check() && Applications::where('application_id', Auth::id())
+                        ->first()
+                ?->hasPendingApplication;
+        if ($checklist_id == 0) {
+            if ($hasPendingApplication) {
+                return redirect()->back()->withErrors([
+                            'error' => 'You cannot apply for this course because you have an existing open application. To proceed you will need to cancel the open application from your portal.'
+                ]);
+            }
+        }
+
 
         $course->load('institution');
         $breadcrumb = $course->name;
@@ -323,6 +347,11 @@ class EnrollmentController extends Controller {
                 'stage' => '50%'
             ]);
 
+            User::role(['Application Manager', 'Finance Manager', 'Super Admin'])
+                    ->get()
+                    ->each(function ($admin) use ($scholarship) {
+                        $admin->notify(new ProofOfPaymentUploadNotification($scholarship));
+                    });
             $zoho = app(ZohoMailService::class);
             $result = $zoho->sendMailable($student->email, new \App\Mail\ProofOfPaymentMail($student));
         } elseif ($request->document_id == 15) {
